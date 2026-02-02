@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WorkLog Pro | Ivan Hermawan</title>
+    <title>WorkLog Pro | Supabase Clean</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         :root {
             --primary: #000000;
-            --accent: #2563eb;
+            --accent: #3ecf8e;
             --bg: #f3f4f6;
             --card: #ffffff;
             --text: #1f2937;
             --text-light: #6b7280;
             --border: #e5e7eb;
             --error: #ef4444;
-            --success: #10b981;
         }
 
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -33,162 +33,75 @@
         .login-box { 
             background: white; padding: 40px; border-radius: 24px; 
             width: 100%; max-width: 400px; text-align: center; 
-            box-shadow: 0 25px 50px -12px rgba(255,255,255,0.1);
         }
         .login-brand { font-size: 28px; font-weight: 800; margin-bottom: 20px; }
         .login-brand span { color: var(--accent); }
-        .login-box h1 { font-size: 24px; margin: 0; letter-spacing: -1px; }
-        .login-box p { color: var(--text-light); margin-bottom: 30px; font-size: 14px; }
-
         .form-float { position: relative; margin-bottom: 20px; text-align: left; }
         .form-float input { 
             width: 100%; padding: 15px; border: 1.5px solid var(--border); 
-            border-radius: 12px; outline: none; font-size: 16px; background: transparent;
+            border-radius: 12px; outline: none; font-size: 16px; 
         }
         .form-float label { 
             position: absolute; left: 15px; top: 15px; color: var(--text-light); 
             transition: 0.2s; pointer-events: none; 
         }
-        .form-float input:focus + label, 
-        .form-float input:not(:placeholder-shown) + label { 
+        .form-float input:focus + label, .form-float input:not(:placeholder-shown) + label { 
             top: -10px; left: 10px; font-size: 12px; background: white; padding: 0 5px; color: var(--accent); 
         }
+        .btn-submit { width: 100%; padding: 15px; background: #000; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
 
-        .btn-submit { 
-            width: 100%; padding: 15px; background: #000; color: white; 
-            border: none; border-radius: 12px; font-weight: 700; cursor: pointer; 
-            transition: 0.3s;
-        }
-        .btn-submit:hover { opacity: 0.8; transform: translateY(-2px); }
-
-        /* --- DASHBOARD LAYOUT --- */
+        /* --- LAYOUT --- */
         .app-layout { display: flex; min-height: 100vh; }
         .app-sidebar { 
             width: 280px; background: white; border-right: 1px solid var(--border); 
             display: flex; flex-direction: column; position: fixed; height: 100vh; 
-            z-index: 100; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100; transition: 0.3s;
         }
-        .app-main { flex: 1; margin-left: 280px; padding: 40px; transition: margin-left 0.3s ease; }
-
-        /* Sidebar Toggle State */
+        .app-main { flex: 1; margin-left: 280px; padding: 40px; transition: 0.3s; }
         .sidebar-hide .app-sidebar { transform: translateX(-280px); }
         .sidebar-hide .app-main { margin-left: 0; }
 
-        .brand { padding: 30px; font-size: 24px; font-weight: 800; }
-        .brand span { color: var(--accent); }
-        .menu { flex: 1; padding: 0 20px; }
-        .menu a { 
-            display: flex; align-items: center; gap: 15px; padding: 14px 20px; 
-            text-decoration: none; color: var(--text-light); font-weight: 600; 
-            border-radius: 12px; margin-bottom: 5px; transition: 0.2s;
-        }
-        .menu a.active { background: #f3f4f6; color: black; }
-        .menu a:hover:not(.active) { background: #fafafa; color: black; }
-
-        .sidebar-user { padding: 20px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-        .avatar { 
-            width: 40px; height: 40px; background: #000; color: white; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; 
-        }
-        .user-info { flex: 1; overflow: hidden; }
-        .u-name { font-size: 14px; font-weight: 700; display: block; }
-        .u-status { font-size: 11px; color: var(--text-light); }
-
-        /* HEADER */
+        /* HEADER & UI ELEMENTS */
         .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-        .h-left { display: flex; align-items: center; gap: 20px; }
-        .header-clock h2 { margin: 0; font-size: 24px; letter-spacing: -1px; }
-        .header-clock span { color: var(--text-light); font-size: 13px; }
+        .btn-round { width: 45px; height: 45px; border-radius: 12px; border: 1px solid var(--border); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .search-bar { background: white; display: flex; align-items: center; padding: 0 15px; border-radius: 12px; border: 1px solid var(--border); width: 280px; }
+        .search-bar input { border: none; outline: none; margin-left: 10px; width: 100%; height: 45px; }
+        .btn-add { background: black; color: white; border: none; padding: 0 20px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; height: 45px; }
 
-        .btn-round { 
-            width: 45px; height: 45px; border-radius: 12px; border: 1px solid var(--border); 
-            background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            transition: 0.2s;
-        }
-        .btn-round:hover { background: #f9fafb; border-color: black; }
-
-        .h-right { display: flex; gap: 15px; align-items: center; }
-        .search-bar { 
-            background: white; display: flex; align-items: center; padding: 0 15px; 
-            border-radius: 12px; border: 1px solid var(--border); width: 280px; height: 45px;
-        }
-        .search-bar input { border: none; outline: none; margin-left: 10px; width: 100%; font-size: 14px; }
-
-        .btn-add { 
-            background: black; color: white; border: none; height: 45px; 
-            padding: 0 20px; border-radius: 12px; font-weight: 700; 
-            cursor: pointer; display: flex; align-items: center; gap: 8px; 
-        }
-
-        /* STATS */
-        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
-        .stat-card { background: white; padding: 25px; border-radius: 20px; border: 1px solid var(--border); }
-        .stat-card span { color: var(--text-light); font-size: 13px; font-weight: 600; }
-        .stat-card h3 { margin: 8px 0 0 0; font-size: 32px; letter-spacing: -1px; }
-
-        /* TABLE */
-        .table-wrapper { background: white; border-radius: 20px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .table-header { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-        .table-header h3 { margin: 0; font-size: 18px; }
-        .table-header select { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); outline: none; }
-
+        /* TABLE & BADGES */
+        .table-wrapper { background: white; border-radius: 20px; border: 1px solid var(--border); overflow: hidden; }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 15px 30px; background: #fafafa; font-size: 11px; text-transform: uppercase; color: var(--text-light); letter-spacing: 1px; }
+        th { text-align: left; padding: 15px 30px; background: #fafafa; font-size: 11px; text-transform: uppercase; color: var(--text-light); }
         td { padding: 18px 30px; border-bottom: 1px solid var(--border); font-size: 14px; }
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: #fafafa; }
-
-        /* BADGES */
-        .badge { padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 10px; text-transform: uppercase; display: inline-block; }
+        .badge { padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 10px; text-transform: uppercase; }
         .badge.high { background: #fee2e2; color: #ef4444; }
         .badge.medium { background: #fef3c7; color: #d97706; }
         .badge.low { background: #dcfce7; color: #16a34a; }
 
         /* MODAL */
-        .modal-overlay { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.4); 
-            backdrop-filter: blur(8px); z-index: 1500; display: flex; align-items: center; justify-content: center; 
-        }
-        .modal-box { 
-            background: white; width: 100%; max-width: 650px; 
-            max-height: 85vh; overflow-y: auto; border-radius: 24px; padding: 40px; 
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-        }
-        .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .modal-head h2 { margin: 0; font-size: 22px; letter-spacing: -0.5px; }
-
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 1500; display: flex; align-items: center; justify-content: center; }
+        .modal-box { background: white; width: 100%; max-width: 650px; max-height: 85vh; overflow-y: auto; border-radius: 24px; padding: 40px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .f-group { margin-bottom: 20px; }
-        .f-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
-        .f-group input, .f-group select { 
-            width: 100%; padding: 12px; border: 1.5px solid var(--border); 
-            border-radius: 12px; font-size: 14px; outline: none; transition: 0.2s;
-        }
-        .f-group input:focus { border-color: var(--accent); }
-        .read-only { background: #f9fafb; cursor: not-allowed; color: var(--text-light); }
-
-        /* PRIORITY BUTTONS (Segmented) */
+        .f-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+        .f-group input, .f-group select { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 14px; outline: none; }
+        .read-only { background: #f9fafb; cursor: not-allowed; }
         .prio-group { display: flex; gap: 10px; background: #f3f4f6; padding: 5px; border-radius: 12px; }
         .prio-group input { display: none; }
-        .prio-group label { 
-            flex: 1; text-align: center; padding: 10px; border-radius: 8px; 
-            cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text-light); transition: 0.2s; 
+        .prio-group label { flex: 1; text-align: center; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .prio-group input:checked + label { background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .rich-editor { height: 120px; border-radius: 12px; margin-bottom: 40px; }
+        .req { color: var(--error); }
+                /* Perbaikan tampilan list bertingkat di modal detail */
+        #detContent.ql-editor {
+            padding: 20px !important; /* Menjaga padding tetap rapi */
+            height: auto;
+            overflow-y: visible;
         }
-        .prio-group input:checked + label { background: white; color: black; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
 
-        .rich-editor { height: 120px; border-radius: 12px; margin-bottom: 10px; }
-        .modal-foot { margin-top: 30px; display: flex; gap: 15px; }
-
-        /* UTILS */
-        .req { color: var(--error); margin-left: 2px; }
-        .error-msg { color: var(--error); font-size: 13px; margin-top: 10px; font-weight: 600; }
-        .btn-icon { background: none; border: none; cursor: pointer; color: var(--text-light); transition: 0.2s; }
-        .btn-icon:hover { color: black; }
-        
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        #detContent.ql-editor ol, #detContent.ql-editor ul {
+            padding-left: 1.5em; /* Memberi ruang untuk angka/bullet */
+        }
     </style>
 </head>
 <body>
@@ -197,95 +110,57 @@
         <div class="login-box">
             <div class="login-brand">WorkLog<span>.</span></div>
             <h1>Dashboard Login</h1>
-            <p>Please enter your password to continue</p>
-            
-            <div class="form-float">
-                <input type="text" id="username" value="ivan.hermawan" readonly placeholder=" ">
-                <label>Username</label>
-            </div>
             <div class="form-float">
                 <input type="password" id="password" placeholder=" " autofocus>
                 <label>Password</label>
             </div>
             <button onclick="handleLogin()" id="btnLogin" class="btn-submit">Sign In</button>
-            <p id="loginError" class="error-msg"></p>
+            <p id="loginError" style="color:red; font-size:13px; margin-top:10px;"></p>
         </div>
     </div>
 
     <div id="mainDashboard" class="app-layout" style="display: none;">
         <aside id="sidebar" class="app-sidebar">
-            <div class="brand">WorkLog<span>.</span></div>
-            <nav class="menu">
-                <a href="#" class="active"><i data-lucide="layout-dashboard"></i> <span>Overview</span></a>
-                <a href="#"><i data-lucide="book-open"></i> <span>Knowledge Base</span></a>
-                <a href="#"><i data-lucide="check-square"></i> <span>Task Manager</span></a>
+            <div class="brand" style="padding:30px; font-size:24px; font-weight:800;">WorkLog<span style="color:var(--accent)">.</span></div>
+            <nav style="flex:1; padding:0 20px;">
+                <a href="#" style="display:flex; gap:15px; padding:15px; background:#f3f4f6; border-radius:12px; text-decoration:none; color:black; font-weight:600;"><i data-lucide="layout-dashboard"></i> Overview</a>
             </nav>
-            <div class="sidebar-user">
-                <div class="avatar">IH</div>
-                <div class="user-info">
-                    <span class="u-name">Ivan Hermawan</span>
-                    <span class="u-status">General Admin</span>
-                </div>
-                <button onclick="location.reload()" class="logout-icon" title="Logout" style="border:none; background:none; color:red; cursor:pointer;">
-                    <i data-lucide="log-out" style="width: 18px;"></i>
-                </button>
+            <div style="padding:20px; border-top:1px solid #eee; display:flex; align-items:center; gap:10px;">
+                <div style="width:40px; height:40px; background:black; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">IH</div>
+                <span style="font-size:14px; font-weight:700;">Ivan Hermawan</span>
             </div>
         </aside>
 
         <main class="app-main">
             <header class="main-header">
-                <div class="h-left">
-                    <button id="sidebarToggle" class="btn-round"><i data-lucide="menu"></i></button>
-                    <div class="header-clock">
-                        <h2 id="digitalClock">00:00</h2>
-                        <span id="currentDate">Loading...</span>
+                <div style="display:flex; gap:20px; align-items:center;">
+                    <button onclick="document.body.classList.toggle('sidebar-hide')" class="btn-round"><i data-lucide="menu"></i></button>
+                    <div>
+                        <h2 id="digitalClock" style="margin:0">00:00</h2>
+                        <span id="currentDate" style="color:gray; font-size:13px;">Date</span>
                     </div>
                 </div>
-                <div class="h-right">
+                <div style="display:flex; gap:15px;">
                     <div class="search-bar">
-                        <i data-lucide="search" style="width: 18px; color: #94a3b8;"></i>
-                        <input type="text" id="globalSearch" placeholder="Filter key learnings..." onkeyup="filterTable()">
+                        <i data-lucide="search" style="color:gray; width:18px"></i>
+                        <input type="text" id="globalSearch" placeholder="Filter learning..." onkeyup="filterTable()">
                     </div>
-                    <button onclick="openModal('input')" class="btn-add">
-                        <i data-lucide="plus" style="width: 18px;"></i> New Entry
-                    </button>
+                    <button onclick="openModal('input')" class="btn-add"><i data-lucide="plus"></i> New Entry</button>
                 </div>
             </header>
 
-            <section class="stats-row">
-                <div class="stat-card">
-                    <span>Days Active</span>
-                    <h3 id="statDays">0</h3>
-                </div>
-                <div class="stat-card">
-                    <span>Total Logs</span>
-                    <h3 id="statLearnings">0</h3>
-                </div>
-                <div class="stat-card">
-                    <span>Priority Tasks</span>
-                    <h3 id="statActions">0</h3>
-                </div>
-            </section>
-
             <div class="table-wrapper">
-                <div class="table-header">
-                    <h3>Recent Logs</h3>
-                    <select id="filterCategory" onchange="filterTable()">
-                        <option value="">All Categories</option>
-                    </select>
-                </div>
                 <table id="logTable">
                     <thead>
                         <tr>
                             <th>Date</th>
                             <th>Category</th>
-                            <th style="width: 40%;">Key Learning</th>
+                            <th style="width:50%">Key Learning</th>
                             <th>Priority</th>
-                            <th>Option</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody">
-                        </tbody>
+                    <tbody id="tableBody"></tbody>
                 </table>
             </div>
         </main>
@@ -293,242 +168,170 @@
 
     <div id="modalOverlay" class="modal-overlay" style="display: none;">
         <div class="modal-box">
-            <div class="modal-head">
-                <h2 id="modalTitle">Create New Log</h2>
-                <button onclick="closeModal()" class="btn-icon"><i data-lucide="x"></i></button>
+            <div style="display:flex; justify-content:space-between; margin-bottom:30px">
+                <h2 id="modalTitle" style="margin:0">New Entry</h2>
+                <button onclick="closeModal()" style="border:none; background:none; cursor:pointer;"><i data-lucide="x"></i></button>
             </div>
             
             <form id="workForm">
                 <input type="hidden" id="editId">
-                
-               <div class="f-group">
-                    <label>Category <span class="req">*</span></label>
-                    <input type="text" id="category" list="categoryList" required placeholder="Type or select category...">
-                    <datalist id="categoryList">
-                        </datalist>
+                <div class="grid-2">
+                    <div class="f-group">
+                        <label>Log Date <span class="req">*</span></label>
+                        <input type="date" id="logDate" required>
+                    </div>
+                    <div class="f-group">
+                        <label>Entry Number</label>
+                        <input type="text" id="entryCount" readonly class="read-only">
+                    </div>
                 </div>
 
-                <div class="f-group">
-                    <label>Priority Level</label>
-                    <div class="prio-group">
-                        <input type="radio" name="priority" id="low" value="Low">
-                        <label for="low">Low</label>
-                        <input type="radio" name="priority" id="med" value="Medium" checked>
-                        <label for="med">Medium</label>
-                        <input type="radio" name="priority" id="high" value="High">
-                        <label for="high">High</label>
+                <div class="grid-2">
+                    <div class="f-group">
+                        <label>Category <span class="req">*</span></label>
+                        <input type="text" id="categoryLog" list="categoryList" required placeholder="Type or select...">
+                        <datalist id="categoryList"></datalist>
+                    </div>
+                    <div class="f-group">
+                        <label>Priority</label>
+                        <div class="prio-group">
+                            <input type="radio" name="prio" id="p_low" value="Low"><label for="p_low">Low</label>
+                            <input type="radio" name="prio" id="p_med" value="Medium" checked><label for="p_med">Medium</label>
+                            <input type="radio" name="prio" id="p_high" value="High"><label for="p_high">High</label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="f-group">
                     <label>Key Learning <span class="req">*</span></label>
-                    <input type="text" id="keyLearnings" required placeholder="Ex: Optimized database query for..." onblur="formatProperCase(this)">
-                </div>
-
-                <div class="grid-2">
-                    <div class="f-group">
-                        <label>Entry Date <span class="req">*</span></label>
-                        <input type="date" id="inputDate" required>
-                    </div>
-                    <div class="f-group">
-                        <label>Entry Number</label>
-                        <input type="text" id="entryNumber" readonly class="read-only">
-                    </div>
+                    <input type="text" id="keyLearning" required placeholder="What did you learn?" onblur="this.value = this.value.replace(/\b\w/g, l => l.toUpperCase())">
                 </div>
 
                 <div class="f-group">
-                    <label>Action Items</label>
-                    <div id="editorActions" class="rich-editor"></div>
-                </div>
-
-                <div class="f-group" style="margin-bottom: 0;">
-                    <label>Additional Notes</label>
+                    <label>Action Items / Notes</label>
                     <div id="editorNotes" class="rich-editor"></div>
                 </div>
 
-                <div class="modal-foot">
-                    <button type="button" onclick="closeModal()" class="btn-white">Cancel</button>
-                    <button type="submit" id="btnSave" class="btn-dark">Save Entry</button>
+                <div style="display:flex; gap:15px; margin-top:40px">
+                    <button type="button" onclick="closeModal()" style="flex:1; padding:15px; border-radius:12px; border:1px solid #ddd; background:white; font-weight:700; cursor:pointer;">Cancel</button>
+                    <button type="submit" id="btnSave" style="flex:1; padding:15px; border-radius:12px; border:none; background:black; color:white; font-weight:700; cursor:pointer;">Save Data</button>
                 </div>
             </form>
         </div>
     </div>
 
     <div id="detailOverlay" class="modal-overlay" style="display: none;">
-        <div class="modal-box" style="max-width: 500px;">
-            <div id="detailContent"></div>
-            <div class="modal-foot">
-                <button onclick="closeDetail()" class="btn-dark">Close View</button>
+    <div class="modal-box" style="max-width: 700px; border-left: 8px solid var(--accent);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px">
+            <div>
+                <span id="detBadge" class="badge">Priority</span>
+                <h1 id="detTitle" style="margin:10px 0 5px 0; font-size:28px;">Key Learning Title</h1>
+                <small id="detMeta" style="color:var(--text-light); font-weight:600;"></small>
             </div>
+            <button onclick="closeDetail()" style="border:none; background:none; cursor:pointer;"><i data-lucide="x"></i></button>
         </div>
+        <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+        <div style="margin-bottom:25px;">
+            <h4 style="margin-bottom:10px; color:var(--text-light); font-size:12px; text-transform:uppercase; letter-spacing:1px;">Notes / Action Items</h4>
+            <div id="detContent" class="ql-editor" style="line-height:1.6; background:#f9fafb; padding:20px; border-radius:16px; border:1px solid var(--border);"></div>
+        </div>
+        <button onclick="closeDetail()" style="width:100%; padding:15px; border-radius:12px; border:none; background:black; color:white; font-weight:700; cursor:pointer;">Close Preview</button>
     </div>
+</div>
 
     <script>
-        // --- CONFIGURATION ---
-        const API_URL = "https://script.google.com/macros/s/AKfycbzDZaitpg4cd1eDiIT-bIRw5ddh8oCv5o-kFUp5NKorM8RM-_swK-c0RNYqlyz3QO05/exec"; // GANTI INI!
+                // --- 1. SUPABASE CONFIG ---
+        const SUPABASE_URL = "https://eqvvznninjlxuijmazxi.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxdnZ6bm5pbmpseHVpam1henhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMDI2OTQsImV4cCI6MjA4NTU3ODY5NH0.KaBBl4zeybCtxBDm9bR6R8v-shlkns2MjvKL2VuvgpQ";
 
-        let quillActions, quillNotes;
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        let quill;
 
-        // --- INITIALIZATION ---
+        // --- 2. INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             startTime();
-            initEditors();
-        // Enter    
-            document.getElementById('password').addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    handleLogin();
-                }
+            quill = new Quill('#editorNotes', { 
+                theme: 'snow', 
+                modules: { toolbar: [['bold', 'italic'], [{ 'list': 'bullet' }]] } 
             });
-
-            // Sidebar Toggle
-            document.getElementById('sidebarToggle').addEventListener('click', () => {
-                document.body.classList.toggle('sidebar-hide');
+            
+            document.getElementById('password').addEventListener('keypress', e => { 
+                if(e.key === 'Enter') handleLogin(); 
             });
         });
 
-        function initEditors() {
-            const toolbar = [['bold', 'italic'], [{ 'list': 'bullet' }]];
-            quillActions = new Quill('#editorActions', { theme: 'snow', modules: { toolbar } });
-            quillNotes = new Quill('#editorNotes', { theme: 'snow', modules: { toolbar } });
-        }
-
         function startTime() {
             const now = new Date();
-            document.getElementById('digitalClock').innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('currentDate').innerText = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' });
+            document.getElementById('digitalClock').innerText = now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+            document.getElementById('currentDate').innerText = now.toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'});
             setTimeout(startTime, 1000);
         }
 
-        function formatProperCase(el) {
-            if (!el.value) return;
-            el.value = el.value.toLowerCase().replace(/\b\w/g, s => s.toUpperCase());
-        }
-
-        // --- API HELPERS ---
-        async function fetchAPI(payload) {
-            // Tambahkan indikator di console untuk memantau waktu kirim
-            console.time('apiCall'); 
-            
-            try {
-                const response = await fetch(API_URL, { 
-                    method: 'POST', 
-                    // Ubah ke mode 'cors' secara eksplisit
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8', 
-                    },
-                    body: JSON.stringify(payload) 
-                });
-                
-                const result = await response.json();
-                console.timeEnd('apiCall');
-                return result;
-            } catch (err) {
-                console.timeEnd('apiCall');
-                console.error("Detail Error:", err);
-                return { success: false };
-            }
-        }
-
-        // --- AUTH ---
-        async function handleLogin() {
+        // --- 3. AUTHENTICATION ---
+        function handleLogin() {
             const pass = document.getElementById('password').value;
-            const btn = document.getElementById('btnLogin');
-            const err = document.getElementById('loginError');
-
-            if(!pass) return;
-
-            btn.innerText = "Authenticating...";
-            btn.disabled = true;
-            err.innerText = "";
-
-            const res = await fetchAPI({ action: 'login', username: 'ivan.hermawan', password: pass });
-
-            if(res.success) {
+            if(pass === '123') { 
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('mainDashboard').style.display = 'flex';
                 loadData();
             } else {
-                err.innerText = "Invalid Password!";
-                btn.innerText = "Sign In";
-                btn.disabled = false;
+                document.getElementById('loginError').innerText = "Password Salah!";
+                document.getElementById('password').value = "";
             }
         }
 
-        // --- DATA OPERATIONS ---
+        // --- 4. DATA OPERATIONS (LOAD & RENDER) ---
         async function loadData() {
-            const res = await fetch(API_URL); 
-            const data = await res.json();
-            
-            // Jika data kosong (pertama kali pakai), buat array kosong agar tidak error
-            const cleanData = Array.isArray(data) ? data : [];
-            
-            renderTable(cleanData);
-            updateStats(cleanData);
-            updateFilterDropdown(cleanData);
+            const { data, error } = await _supabase
+                .from('logData')
+                .select('*')
+                .order('logDate', { ascending: false });
+
+            if (!error) renderTable(data);
         }
 
         function renderTable(data) {
             const tbody = document.getElementById('tableBody');
+            const catList = document.getElementById('categoryList');
             tbody.innerHTML = '';
-
-            data.forEach((row, index) => {
+            
+            const categories = new Set();
+            data.forEach(row => {
+                if(row.categoryLog) categories.add(row.categoryLog);
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td style="font-weight:600">${row.date || '-'}</td>
-                    <td><span class="badge" style="background:#f3f4f6; color:#374151">${row.category}</span></td>
-                    <td style="font-weight:500">${row.keyLearnings}</td>
-                    <td><span class="badge ${row.priority.toLowerCase()}">${row.priority}</span></td>
+                    <td>${row.logDate}</td>
+                    <td><span class="badge" style="background:#f3f4f6; color:#374151">${row.categoryLog || '-'}</span></td>
+                    <td style="font-weight:600">${row.keyLearning || '-'}</td>
+                    <td><span class="badge ${(row.priorityLog || 'low').toLowerCase()}">${row.priorityLog || 'Low'}</span></td>
                     <td>
-                        <button onclick='showDetail(${JSON.stringify(row)})' class="btn-icon" title="View"><i data-lucide="eye" style="width:18px"></i></button>
-                        <button onclick='editLog(${JSON.stringify(row)})' class="btn-icon" title="Edit"><i data-lucide="edit-3" style="width:18px"></i></button>
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <button onclick='viewDetail(${JSON.stringify(row)})' style="border:none; background:none; cursor:pointer; color:#3b82f6;" title="View Detail">
+                                <i data-lucide="eye" style="width:18px"></i>
+                            </button>
+                            <button onclick='editLog(${JSON.stringify(row)})' style="border:none; background:none; cursor:pointer; color:#666;" title="Edit Entry">
+                                <i data-lucide="edit-3" style="width:18px"></i>
+                            </button>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
             lucide.createIcons();
+            catList.innerHTML = Array.from(categories).map(c => `<option value="${c}">`).join('');
         }
 
-        function updateStats(data) {
-            const start = new Date("2026-02-01");
-            const diff = Math.ceil((new Date() - start) / (1000 * 60 * 60 * 24));
-            document.getElementById('statDays').innerText = diff > 0 ? diff : 1;
-            document.getElementById('statLearnings').innerText = data.length;
-            document.getElementById('statActions').innerText = data.filter(r => r.priority === 'High').length;
-        }
-
-        function updateFilterDropdown(data) {
-            const filterSelect = document.getElementById('filterCategory');
-            const formDatalist = document.getElementById('categoryList');
-            
-            // Ambil list kategori unik dari data yang sudah ada (Hapus dummy)
-            const cats = [...new Set(data.map(r => r.category).filter(c => c))];
-            
-            // Update Dropdown Filter di Dashboard Utama
-            filterSelect.innerHTML = '<option value="">All Categories</option>' + 
-                cats.map(c => `<option value="${c}">${c}</option>`).join('');
-                
-            // Update Datalist di Form Input (Agar bisa autocomplete saat ngetik kategori baru)
-            formDatalist.innerHTML = cats.map(c => `<option value="${c}">`).join('');
-        }
-        // --- FORM LOGIC ---
-        function openModal(mode) {
+        // --- 5. MODAL FORM ACTIONS ---
+        async function openModal() {
             document.getElementById('modalOverlay').style.display = 'flex';
             document.getElementById('workForm').reset();
-            quillActions.setContents([]); 
-            quillNotes.setContents([]);
+            quill.setContents([]);
             document.getElementById('editId').value = "";
-            
-            // --- SET TANGGAL OTOMATIS KE HARI INI ---
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('inputDate').value = today;
+            document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
 
-            // Set Entry Number
-            const count = document.querySelectorAll('#tableBody tr').length;
-            document.getElementById('entryNumber').value = count + 1;
-            
-            document.getElementById('modalTitle').innerText = mode === 'edit' ? "Edit Log" : "Create New Log";
+            const { count } = await _supabase.from('logData').select('*', { count: 'exact', head: true });
+            document.getElementById('entryCount').value = (count || 0) + 1;
         }
 
         function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
@@ -538,71 +341,69 @@
             const btn = document.getElementById('btnSave');
             btn.innerText = "Saving..."; btn.disabled = true;
 
+            const id = document.getElementById('editId').value;
             const payload = {
-                action: 'save',
-                formData: {
-                    // AMBIL TANGGAL DARI INPUT (Bukan otomatis dari server)
-                    date: document.getElementById('inputDate').value, 
-                    category: document.getElementById('category').value,
-                    priority: document.querySelector('input[name="priority"]:checked').value,
-                    keyLearnings: document.getElementById('keyLearnings').value,
-                    keyContacts: document.getElementById('keyContacts').value,
-                    resourceLink: document.getElementById('resourceLink').value,
-                    actionItems: quillActions.root.innerHTML,
-                    notes: quillNotes.root.innerHTML
-                }
+                logDate: document.getElementById('logDate').value,
+                entryCount: parseInt(document.getElementById('entryCount').value),
+                categoryLog: document.getElementById('categoryLog').value,
+                priorityLog: document.querySelector('input[name="prio"]:checked').value,
+                keyLearning: document.getElementById('keyLearning').value,
+                notesLog: quill.root.innerHTML
             };
 
-            const res = await fetchAPI(payload);
-            if(res.success) {
+            let res;
+            if(id) res = await _supabase.from('logData').update(payload).eq('id', id);
+            else res = await _supabase.from('logData').insert([payload]);
+
+            if(!res.error) {
                 closeModal();
                 loadData();
+            } else {
+                alert("Error: " + res.error.message);
             }
-            btn.innerText = "Save Entry"; btn.disabled = false;
+            btn.innerText = "Save Data"; btn.disabled = false;
         };
-        // --- FILTER ---
-        function filterTable() {
-            const search = document.getElementById('globalSearch').value.toLowerCase();
-            const cat = document.getElementById('filterCategory').value.toLowerCase();
-            const rows = document.querySelectorAll('#tableBody tr');
 
-            rows.forEach(row => {
-                const text = row.innerText.toLowerCase();
-                const matchesSearch = text.includes(search);
-                const matchesCat = cat === "" || text.includes(cat);
-                row.style.display = (matchesSearch && matchesCat) ? '' : 'none';
-            });
-        }
-
-        // --- DETAIL & EDIT ---
-        function showDetail(row) {
-            document.getElementById('detailOverlay').style.display = 'flex';
-            document.getElementById('detailContent').innerHTML = `
-                <h2 style="margin-bottom:5px">${row.keyLearnings}</h2>
-                <span class="badge ${row.priority.toLowerCase()}">${row.priority}</span>
-                <p style="color:gray; font-size:12px; margin-top:10px">${row.date} | Category: ${row.category}</p>
-                <hr style="border:0; border-top:1px solid #eee; margin:20px 0">
-                <div style="font-size:14px">
-                    <strong>Action Items:</strong><div style="margin-bottom:15px">${row.actionItems}</div>
-                    <strong>Notes:</strong><div>${row.notes || '-'}</div>
-                </div>
-            `;
-        }
-        function closeDetail() { document.getElementById('detailOverlay').style.display = 'none'; }
-
+        // --- 6. EDIT & DETAIL LOGIC ---
         function editLog(row) {
-            openModal('edit');
-            document.getElementById('modalTitle').innerText = "Edit Log";
-            document.getElementById('category').value = row.category;
-            document.getElementById('keyLearnings').value = row.keyLearnings;
-            document.getElementById('keyContacts').value = row.keyContacts;
-            document.getElementById('resourceLink').value = row.resourceLink;
-            document.getElementById('inputDate').value = row.date;
-            // Set priority radio
-            document.querySelector(`input[name="priority"][value="${row.priority}"]`).checked = true;
-            // Set Quill
-            quillActions.clipboard.dangerouslyPasteHTML(row.actionItems);
-            quillNotes.clipboard.dangerouslyPasteHTML(row.notes);
+            document.getElementById('modalOverlay').style.display = 'flex';
+            document.getElementById('modalTitle').innerText = "Edit Entry";
+            document.getElementById('editId').value = row.id;
+            document.getElementById('logDate').value = row.logDate;
+            document.getElementById('entryCount').value = row.entryCount;
+            document.getElementById('categoryLog').value = row.categoryLog;
+            document.getElementById('keyLearning').value = row.keyLearning;
+            
+            const radio = document.querySelector(`input[name="prio"][value="${row.priorityLog}"]`);
+            if(radio) radio.checked = true;
+            
+            quill.clipboard.dangerouslyPasteHTML(row.notesLog || "");
+        }
+
+        function viewDetail(row) {
+            document.getElementById('detailOverlay').style.display = 'flex';
+            
+            const badge = document.getElementById('detBadge');
+            badge.innerText = row.priorityLog;
+            badge.className = `badge ${row.priorityLog.toLowerCase()}`;
+            
+            document.getElementById('detTitle').innerText = row.keyLearning;
+            document.getElementById('detMeta').innerText = `Log #${row.entryCount}  •  Category: ${row.categoryLog}  •  Date: ${row.logDate}`;
+            
+            const content = document.getElementById('detContent');
+            content.innerHTML = row.notesLog || '<i style="color:gray">No additional notes provided.</i>';
+            
+            lucide.createIcons();
+        }
+
+        function closeDetail() {
+            document.getElementById('detailOverlay').style.display = 'none';
+        }
+
+        function filterTable() {
+            const val = document.getElementById('globalSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#tableBody tr');
+            rows.forEach(r => r.style.display = r.innerText.toLowerCase().includes(val) ? '' : 'none');
         }
     </script>
 </body>
