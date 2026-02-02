@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WorkLog Pro | Supabase Clean</title>
+    <title>WorkLog Pro | Supabase Ultimate</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -34,20 +34,6 @@
             background: white; padding: 40px; border-radius: 24px; 
             width: 100%; max-width: 400px; text-align: center; 
         }
-        .login-brand { font-size: 28px; font-weight: 800; margin-bottom: 20px; }
-        .login-brand span { color: var(--accent); }
-        .form-float { position: relative; margin-bottom: 20px; text-align: left; }
-        .form-float input { 
-            width: 100%; padding: 15px; border: 1.5px solid var(--border); 
-            border-radius: 12px; outline: none; font-size: 16px; 
-        }
-        .form-float label { 
-            position: absolute; left: 15px; top: 15px; color: var(--text-light); 
-            transition: 0.2s; pointer-events: none; 
-        }
-        .form-float input:focus + label, .form-float input:not(:placeholder-shown) + label { 
-            top: -10px; left: 10px; font-size: 12px; background: white; padding: 0 5px; color: var(--accent); 
-        }
         .btn-submit { width: 100%; padding: 15px; background: #000; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
 
         /* --- LAYOUT --- */
@@ -61,14 +47,14 @@
         .sidebar-hide .app-sidebar { transform: translateX(-280px); }
         .sidebar-hide .app-main { margin-left: 0; }
 
-        /* HEADER & UI ELEMENTS */
+        /* UI ELEMENTS */
         .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
         .btn-round { width: 45px; height: 45px; border-radius: 12px; border: 1px solid var(--border); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .search-bar { background: white; display: flex; align-items: center; padding: 0 15px; border-radius: 12px; border: 1px solid var(--border); width: 280px; }
         .search-bar input { border: none; outline: none; margin-left: 10px; width: 100%; height: 45px; }
         .btn-add { background: black; color: white; border: none; padding: 0 20px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; height: 45px; }
 
-        /* TABLE & BADGES */
+        /* TABLE */
         .table-wrapper { background: white; border-radius: 20px; border: 1px solid var(--border); overflow: hidden; }
         table { width: 100%; border-collapse: collapse; }
         th { text-align: left; padding: 15px 30px; background: #fafafa; font-size: 11px; text-transform: uppercase; color: var(--text-light); }
@@ -81,39 +67,23 @@
         /* MODAL */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 1500; display: flex; align-items: center; justify-content: center; }
         .modal-box { background: white; width: 100%; max-width: 650px; max-height: 85vh; overflow-y: auto; border-radius: 24px; padding: 40px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .f-group { margin-bottom: 20px; }
         .f-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
         .f-group input, .f-group select { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 14px; outline: none; }
-        .read-only { background: #f9fafb; cursor: not-allowed; }
-        .prio-group { display: flex; gap: 10px; background: #f3f4f6; padding: 5px; border-radius: 12px; }
-        .prio-group input { display: none; }
-        .prio-group label { flex: 1; text-align: center; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
-        .prio-group input:checked + label { background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .rich-editor { height: 120px; border-radius: 12px; margin-bottom: 40px; }
-        .req { color: var(--error); }
-                /* Perbaikan tampilan list bertingkat di modal detail */
-        #detContent.ql-editor {
-            padding: 20px !important; /* Menjaga padding tetap rapi */
-            height: auto;
-            overflow-y: visible;
-        }
-
-        #detContent.ql-editor ol, #detContent.ql-editor ul {
-            padding-left: 1.5em; /* Memberi ruang untuk angka/bullet */
-        }
+        .rich-editor { height: 150px; border-radius: 12px; margin-bottom: 40px; }
+        
+        /* QUILL LIST CORRECTION */
+        #detContent.ql-editor { padding: 20px !important; height: auto; overflow-y: visible; }
+        #detContent.ql-editor ol, #detContent.ql-editor ul { padding-left: 1.5em; }
     </style>
 </head>
 <body>
 
     <div id="loginPage" class="auth-wrapper">
         <div class="login-box">
-            <div class="login-brand">WorkLog<span>.</span></div>
-            <h1>Dashboard Login</h1>
-            <div class="form-float">
-                <input type="password" id="password" placeholder=" " autofocus>
-                <label>Password</label>
-            </div>
+            <h2 style="font-weight:800; font-size:28px;">WorkLog<span style="color:var(--accent)">.</span></h2>
+            <p style="color:gray; margin-bottom:30px;">Silahkan masukkan akses</p>
+            <input type="password" id="password" placeholder="Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid #ddd; margin-bottom:20px; outline:none; text-align:center; font-size:16px;">
             <button onclick="handleLogin()" id="btnLogin" class="btn-submit">Sign In</button>
             <p id="loginError" style="color:red; font-size:13px; margin-top:10px;"></p>
         </div>
@@ -121,45 +91,27 @@
 
     <div id="mainDashboard" class="app-layout" style="display: none;">
         <aside id="sidebar" class="app-sidebar">
-            <div class="brand" style="padding:30px; font-size:24px; font-weight:800;">WorkLog<span style="color:var(--accent)">.</span></div>
+            <div style="padding:30px; font-size:24px; font-weight:800;">WorkLog<span style="color:var(--accent)">.</span></div>
             <nav style="flex:1; padding:0 20px;">
-                <a href="#" style="display:flex; gap:15px; padding:15px; background:#f3f4f6; border-radius:12px; text-decoration:none; color:black; font-weight:600;"><i data-lucide="layout-dashboard"></i> Overview</a>
+                <div style="display:flex; gap:15px; padding:15px; background:#f3f4f6; border-radius:12px; font-weight:600;"><i data-lucide="layout-dashboard"></i> Overview</div>
             </nav>
-            <div style="padding:20px; border-top:1px solid #eee; display:flex; align-items:center; gap:10px;">
-                <div style="width:40px; height:40px; background:black; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700;">IH</div>
-                <span style="font-size:14px; font-weight:700;">Ivan Hermawan</span>
-            </div>
         </aside>
 
         <main class="app-main">
             <header class="main-header">
                 <div style="display:flex; gap:20px; align-items:center;">
                     <button onclick="document.body.classList.toggle('sidebar-hide')" class="btn-round"><i data-lucide="menu"></i></button>
-                    <div>
-                        <h2 id="digitalClock" style="margin:0">00:00</h2>
-                        <span id="currentDate" style="color:gray; font-size:13px;">Date</span>
-                    </div>
+                    <div><h2 id="digitalClock" style="margin:0">00:00</h2><span id="currentDate" style="color:gray; font-size:13px;">Date</span></div>
                 </div>
                 <div style="display:flex; gap:15px;">
-                    <div class="search-bar">
-                        <i data-lucide="search" style="color:gray; width:18px"></i>
-                        <input type="text" id="globalSearch" placeholder="Filter learning..." onkeyup="filterTable()">
-                    </div>
-                    <button onclick="openModal('input')" class="btn-add"><i data-lucide="plus"></i> New Entry</button>
+                    <div class="search-bar"><i data-lucide="search" style="color:gray; width:18px"></i><input type="text" id="globalSearch" placeholder="Cari learning..." onkeyup="filterTable()"></div>
+                    <button onclick="openModal()" class="btn-add"><i data-lucide="plus"></i> New Entry</button>
                 </div>
             </header>
 
             <div class="table-wrapper">
-                <table id="logTable">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Category</th>
-                            <th style="width:50%">Key Learning</th>
-                            <th>Priority</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
+                <table>
+                    <thead><tr><th>Date</th><th>Category</th><th style="width:50%">Key Learning</th><th>Priority</th><th>Action</th></tr></thead>
                     <tbody id="tableBody"></tbody>
                 </table>
             </div>
@@ -168,51 +120,25 @@
 
     <div id="modalOverlay" class="modal-overlay" style="display: none;">
         <div class="modal-box">
-            <div style="display:flex; justify-content:space-between; margin-bottom:30px">
-                <h2 id="modalTitle" style="margin:0">New Entry</h2>
-                <button onclick="closeModal()" style="border:none; background:none; cursor:pointer;"><i data-lucide="x"></i></button>
-            </div>
-            
+            <h2 id="modalTitle" style="margin-top:0">New Entry</h2>
             <form id="workForm">
                 <input type="hidden" id="editId">
-                <div class="grid-2">
-                    <div class="f-group">
-                        <label>Log Date <span class="req">*</span></label>
-                        <input type="date" id="logDate" required>
-                    </div>
-                    <div class="f-group">
-                        <label>Entry Number</label>
-                        <input type="text" id="entryCount" readonly class="read-only">
-                    </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                    <div class="f-group"><label>Log Date</label><input type="date" id="logDate" required></div>
+                    <div class="f-group"><label>Entry #</label><input type="text" id="entryCount" readonly style="background:#f9fafb;"></div>
                 </div>
-
-                <div class="grid-2">
-                    <div class="f-group">
-                        <label>Category <span class="req">*</span></label>
-                        <input type="text" id="categoryLog" list="categoryList" required placeholder="Type or select...">
-                        <datalist id="categoryList"></datalist>
-                    </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                    <div class="f-group"><label>Category</label><input type="text" id="categoryLog" list="categoryList" required><datalist id="categoryList"></datalist></div>
                     <div class="f-group">
                         <label>Priority</label>
-                        <div class="prio-group">
-                            <input type="radio" name="prio" id="p_low" value="Low"><label for="p_low">Low</label>
-                            <input type="radio" name="prio" id="p_med" value="Medium" checked><label for="p_med">Medium</label>
-                            <input type="radio" name="prio" id="p_high" value="High"><label for="p_high">High</label>
-                        </div>
+                        <select id="priorityLog" style="width:100%; padding:12px; border-radius:12px; border:1.5px solid var(--border);">
+                            <option value="Low">Low</option><option value="Medium" selected>Medium</option><option value="High">High</option>
+                        </select>
                     </div>
                 </div>
-
-                <div class="f-group">
-                    <label>Key Learning <span class="req">*</span></label>
-                    <input type="text" id="keyLearning" required placeholder="What did you learn?" onblur="this.value = this.value.replace(/\b\w/g, l => l.toUpperCase())">
-                </div>
-
-                <div class="f-group">
-                    <label>Action Items / Notes</label>
-                    <div id="editorNotes" class="rich-editor"></div>
-                </div>
-
-                <div style="display:flex; gap:15px; margin-top:40px">
+                <div class="f-group"><label>Key Learning</label><input type="text" id="keyLearning" required></div>
+                <div class="f-group"><label>Action Items / Notes</label><div id="editorNotes" class="rich-editor"></div></div>
+                <div style="display:flex; gap:15px;">
                     <button type="button" onclick="closeModal()" style="flex:1; padding:15px; border-radius:12px; border:1px solid #ddd; background:white; font-weight:700; cursor:pointer;">Cancel</button>
                     <button type="submit" id="btnSave" style="flex:1; padding:15px; border-radius:12px; border:none; background:black; color:white; font-weight:700; cursor:pointer;">Save Data</button>
                 </div>
@@ -221,164 +147,89 @@
     </div>
 
     <div id="detailOverlay" class="modal-overlay" style="display: none;">
-    <div class="modal-box" style="max-width: 700px; border-left: 8px solid var(--accent);">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px">
-            <div>
-                <span id="detBadge" class="badge">Priority</span>
-                <h1 id="detTitle" style="margin:10px 0 5px 0; font-size:28px;">Key Learning Title</h1>
-                <small id="detMeta" style="color:var(--text-light); font-weight:600;"></small>
+        <div class="modal-box" style="max-width: 700px; border-left: 8px solid var(--accent);">
+            <div style="display:flex; justify-content:space-between; align-items:start;">
+                <div>
+                    <span id="detBadge" class="badge">Priority</span>
+                    <h1 id="detTitle" style="margin:10px 0 5px 0;">Title</h1>
+                    <small id="detMeta" style="color:gray; font-weight:600;"></small>
+                </div>
+                <button onclick="closeDetail()" style="border:none; background:none; cursor:pointer;"><i data-lucide="x"></i></button>
             </div>
-            <button onclick="closeDetail()" style="border:none; background:none; cursor:pointer;"><i data-lucide="x"></i></button>
+            <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+            <div id="detContent" class="ql-editor" style="background:#f9fafb; border-radius:16px; border:1px solid var(--border); min-height:100px;"></div>
+            <button onclick="closeDetail()" style="width:100%; margin-top:20px; padding:15px; border-radius:12px; border:none; background:black; color:white; font-weight:700; cursor:pointer;">Close</button>
         </div>
-        <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
-        <div style="margin-bottom:25px;">
-            <h4 style="margin-bottom:10px; color:var(--text-light); font-size:12px; text-transform:uppercase; letter-spacing:1px;">Notes / Action Items</h4>
-            <div id="detContent" class="ql-editor" style="line-height:1.6; background:#f9fafb; padding:20px; border-radius:16px; border:1px solid var(--border);"></div>
-        </div>
-        <button onclick="closeDetail()" style="width:100%; padding:15px; border-radius:12px; border:none; background:black; color:white; font-weight:700; cursor:pointer;">Close Preview</button>
     </div>
-</div>
 
     <script>
-                // --- 1. SUPABASE CONFIG ---
         const SUPABASE_URL = "https://eqvvznninjlxuijmazxi.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxdnZ6bm5pbmpseHVpam1henhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMDI2OTQsImV4cCI6MjA4NTU3ODY5NH0.KaBBl4zeybCtxBDm9bR6R8v-shlkns2MjvKL2VuvgpQ";
-
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        let quill;
+        
+        let quill, originalData = {};
 
-        // --- 2. INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-            startTime();
-            quill = new Quill('#editorNotes', { 
-                theme: 'snow', 
-                modules: { toolbar: [['bold', 'italic'], [{ 'list': 'bullet' }]] } 
-            });
-            
-            document.getElementById('password').addEventListener('keypress', e => { 
-                if(e.key === 'Enter') handleLogin(); 
-            });
+            setInterval(startTime, 1000);
+            quill = new Quill('#editorNotes', { theme: 'snow', modules: { toolbar: [['bold', 'italic'], [{ 'list': 'bullet' }, { 'list': 'ordered' }]] } });
+            document.getElementById('password').addEventListener('keypress', e => { if(e.key === 'Enter') handleLogin(); });
         });
 
         function startTime() {
             const now = new Date();
             document.getElementById('digitalClock').innerText = now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
             document.getElementById('currentDate').innerText = now.toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'});
-            setTimeout(startTime, 1000);
         }
 
-        // --- 3. AUTHENTICATION ---
         function handleLogin() {
-            const pass = document.getElementById('password').value;
-            if(pass === '123') { 
+            if(document.getElementById('password').value === '123') {
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('mainDashboard').style.display = 'flex';
                 loadData();
             } else {
                 document.getElementById('loginError').innerText = "Password Salah!";
-                document.getElementById('password').value = "";
             }
         }
 
-        // --- 4. DATA OPERATIONS (LOAD & RENDER) ---
         async function loadData() {
-            const { data, error } = await _supabase
-                .from('logData')
-                .select('*')
-                .order('logDate', { ascending: false });
-
+            const { data, error } = await _supabase.from('logData').select('*').order('logDate', { ascending: false });
             if (!error) renderTable(data);
         }
 
         function renderTable(data) {
             const tbody = document.getElementById('tableBody');
-            const catList = document.getElementById('categoryList');
             tbody.innerHTML = '';
-            
-            const categories = new Set();
             data.forEach(row => {
-                if(row.categoryLog) categories.add(row.categoryLog);
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${row.logDate}</td>
-                    <td><span class="badge" style="background:#f3f4f6; color:#374151">${row.categoryLog || '-'}</span></td>
-                    <td style="font-weight:600">${row.keyLearning || '-'}</td>
-                    <td><span class="badge ${(row.priorityLog || 'low').toLowerCase()}">${row.priorityLog || 'Low'}</span></td>
+                    <td><span class="badge" style="background:#eee; color:black">${row.categoryLog}</span></td>
+                    <td style="font-weight:600">${row.keyLearning}</td>
+                    <td><span class="badge ${(row.priorityLog || '').toLowerCase()}">${row.priorityLog}</span></td>
                     <td>
-                        <div style="display:flex; gap:12px; align-items:center;">
-                            <button onclick='viewDetail(${JSON.stringify(row)})' style="border:none; background:none; cursor:pointer; color:#3b82f6;" title="View Detail">
-                                <i data-luc
-                                ide="eye" style="width:18px"></i>
-                            </button>
-                            <button onclick='editLog(${JSON.stringify(row)})' style="border:none; background:none; cursor:pointer; color:#666;" title="Edit Entry">
-                                <i data-lucide="edit-3" style="width:18px"></i>
-                            </button>
+                        <div style="display:flex; gap:10px;">
+                            <button onclick='viewDetail(${JSON.stringify(row)})' style="border:none; background:none; cursor:pointer; color:#3b82f6;"><i data-lucide="eye" style="width:18px"></i></button>
+                            <button onclick='editLog(${JSON.stringify(row)})' style="border:none; background:none; cursor:pointer; color:#666;"><i data-lucide="edit-3" style="width:18px"></i></button>
                         </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
             lucide.createIcons();
-            catList.innerHTML = Array.from(categories).map(c => `<option value="${c}">`).join('');
         }
 
-        // --- 5. MODAL FORM ACTIONS ---
         async function openModal() {
             document.getElementById('modalOverlay').style.display = 'flex';
             document.getElementById('workForm').reset();
             quill.setContents([]);
             document.getElementById('editId').value = "";
             document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
-
             const { count } = await _supabase.from('logData').select('*', { count: 'exact', head: true });
             document.getElementById('entryCount').value = (count || 0) + 1;
         }
 
         function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
-
-        document.getElementById('workForm').onsubmit = async (e) => {
-            e.preventDefault();
-            
-            const id = document.getElementById('editId').value;
-            const currentPayload = {
-                logDate: document.getElementById('logDate').value,
-                categoryLog: document.getElementById('categoryLog').value,
-                priorityLog: document.querySelector('input[name="prio"]:checked').value,
-                keyLearning: document.getElementById('keyLearning').value,
-                notesLog: quill.root.innerHTML.trim()
-            };
-
-            // LOGIKA CEK PERUBAHAN (Hanya jika sedang EDIT)
-            if (id) {
-                const isSame = JSON.stringify(currentPayload) === JSON.stringify(originalData);
-                if (isSame) {
-                    alert("Tidak ada data yang berubah.");
-                    closeModal();
-                    return; // Berhenti di sini, tidak lanjut save
-                }
-            }
-
-            const btn = document.getElementById('btnSave');
-            btn.innerText = "Saving..."; btn.disabled = true;
-
-            // Tambahkan field entryCount untuk payload kirim
-            currentPayload.entryCount = parseInt(document.getElementById('entryCount').value);
-
-            let res;
-            if(id) res = await _supabase.from('logData').update(currentPayload).eq('id', id);
-            else res = await _supabase.from('logData').insert([currentPayload]);
-
-            if(!res.error) {
-                closeModal();
-                loadData();
-            } else {
-                alert("Error: " + res.error.message);
-            }
-            btn.innerText = "Save Data"; btn.disabled = false;
-        };
-        // --- 6. EDIT & DETAIL LOGIC ---
-        let originalData = {}; // Variabel global untuk menyimpan data sebelum diedit
 
         function editLog(row) {
             document.getElementById('modalOverlay').style.display = 'flex';
@@ -387,47 +238,61 @@
             document.getElementById('logDate').value = row.logDate;
             document.getElementById('entryCount').value = row.entryCount;
             document.getElementById('categoryLog').value = row.categoryLog;
+            document.getElementById('priorityLog').value = row.priorityLog;
             document.getElementById('keyLearning').value = row.keyLearning;
-            
-            const radio = document.querySelector(`input[name="prio"][value="${row.priorityLog}"]`);
-            if(radio) radio.checked = true;
-            
-            quill.clipboard.dangerouslyPasteHTML(row.notesLog || "");
+            quill.root.innerHTML = row.notesLog || "";
 
-            // Simpan data asli untuk perbandingan nanti
             originalData = {
                 logDate: row.logDate,
                 categoryLog: row.categoryLog,
                 priorityLog: row.priorityLog,
                 keyLearning: row.keyLearning,
-                notesLog: row.notesLog || ""
+                notesLog: quill.root.innerHTML.trim()
             };
         }
 
+        document.getElementById('workForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editId').value;
+            const currentPayload = {
+                logDate: document.getElementById('logDate').value,
+                categoryLog: document.getElementById('categoryLog').value,
+                priorityLog: document.getElementById('priorityLog').value,
+                keyLearning: document.getElementById('keyLearning').value,
+                notesLog: quill.root.innerHTML.trim()
+            };
+
+            if (id && JSON.stringify(currentPayload) === JSON.stringify(originalData)) {
+                alert("Tidak ada data yang berubah.");
+                return closeModal();
+            }
+
+            const btn = document.getElementById('btnSave');
+            btn.innerText = "Saving..."; btn.disabled = true;
+            currentPayload.entryCount = parseInt(document.getElementById('entryCount').value);
+
+            let res = id ? await _supabase.from('logData').update(currentPayload).eq('id', id) : await _supabase.from('logData').insert([currentPayload]);
+
+            if(!res.error) { closeModal(); loadData(); }
+            else { alert("Error: " + res.error.message); }
+            btn.innerText = "Save Data"; btn.disabled = false;
+        };
+
         function viewDetail(row) {
             document.getElementById('detailOverlay').style.display = 'flex';
-            
-            const badge = document.getElementById('detBadge');
-            badge.innerText = row.priorityLog;
-            badge.className = `badge ${row.priorityLog.toLowerCase()}`;
-            
+            document.getElementById('detBadge').innerText = row.priorityLog;
+            document.getElementById('detBadge').className = `badge ${row.priorityLog.toLowerCase()}`;
             document.getElementById('detTitle').innerText = row.keyLearning;
-            document.getElementById('detMeta').innerText = `Log #${row.entryCount}  •  Category: ${row.categoryLog}  •  Date: ${row.logDate}`;
-            
-            const content = document.getElementById('detContent');
-            content.innerHTML = row.notesLog || '<i style="color:gray">No additional notes provided.</i>';
-            
+            document.getElementById('detMeta').innerText = `Log #${row.entryCount} • ${row.categoryLog} • ${row.logDate}`;
+            document.getElementById('detContent').innerHTML = row.notesLog || "No notes.";
             lucide.createIcons();
         }
 
-        function closeDetail() {
-            document.getElementById('detailOverlay').style.display = 'none';
-        }
-
+        function closeDetail() { document.getElementById('detailOverlay').style.display = 'none'; }
+        
         function filterTable() {
             const val = document.getElementById('globalSearch').value.toLowerCase();
-            const rows = document.querySelectorAll('#tableBody tr');
-            rows.forEach(r => r.style.display = r.innerText.toLowerCase().includes(val) ? '' : 'none');
+            document.querySelectorAll('#tableBody tr').forEach(r => r.style.display = r.innerText.toLowerCase().includes(val) ? '' : 'none');
         }
     </script>
 </body>
