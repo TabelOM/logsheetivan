@@ -308,7 +308,8 @@
                     <td>
                         <div style="display:flex; gap:12px; align-items:center;">
                             <button onclick='viewDetail(${JSON.stringify(row)})' style="border:none; background:none; cursor:pointer; color:#3b82f6;" title="View Detail">
-                                <i data-lucide="eye" style="width:18px"></i>
+                                <i data-luc
+                                ide="eye" style="width:18px"></i>
                             </button>
                             <button onclick='editLog(${JSON.stringify(row)})' style="border:none; background:none; cursor:pointer; color:#666;" title="Edit Entry">
                                 <i data-lucide="edit-3" style="width:18px"></i>
@@ -338,22 +339,35 @@
 
         document.getElementById('workForm').onsubmit = async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btnSave');
-            btn.innerText = "Saving..."; btn.disabled = true;
-
+            
             const id = document.getElementById('editId').value;
-            const payload = {
+            const currentPayload = {
                 logDate: document.getElementById('logDate').value,
-                entryCount: parseInt(document.getElementById('entryCount').value),
                 categoryLog: document.getElementById('categoryLog').value,
                 priorityLog: document.querySelector('input[name="prio"]:checked').value,
                 keyLearning: document.getElementById('keyLearning').value,
-                notesLog: quill.root.innerHTML
+                notesLog: quill.root.innerHTML.trim()
             };
 
+            // LOGIKA CEK PERUBAHAN (Hanya jika sedang EDIT)
+            if (id) {
+                const isSame = JSON.stringify(currentPayload) === JSON.stringify(originalData);
+                if (isSame) {
+                    alert("Tidak ada data yang berubah.");
+                    closeModal();
+                    return; // Berhenti di sini, tidak lanjut save
+                }
+            }
+
+            const btn = document.getElementById('btnSave');
+            btn.innerText = "Saving..."; btn.disabled = true;
+
+            // Tambahkan field entryCount untuk payload kirim
+            currentPayload.entryCount = parseInt(document.getElementById('entryCount').value);
+
             let res;
-            if(id) res = await _supabase.from('logData').update(payload).eq('id', id);
-            else res = await _supabase.from('logData').insert([payload]);
+            if(id) res = await _supabase.from('logData').update(currentPayload).eq('id', id);
+            else res = await _supabase.from('logData').insert([currentPayload]);
 
             if(!res.error) {
                 closeModal();
@@ -363,8 +377,9 @@
             }
             btn.innerText = "Save Data"; btn.disabled = false;
         };
-
         // --- 6. EDIT & DETAIL LOGIC ---
+        let originalData = {}; // Variabel global untuk menyimpan data sebelum diedit
+
         function editLog(row) {
             document.getElementById('modalOverlay').style.display = 'flex';
             document.getElementById('modalTitle').innerText = "Edit Entry";
@@ -378,6 +393,15 @@
             if(radio) radio.checked = true;
             
             quill.clipboard.dangerouslyPasteHTML(row.notesLog || "");
+
+            // Simpan data asli untuk perbandingan nanti
+            originalData = {
+                logDate: row.logDate,
+                categoryLog: row.categoryLog,
+                priorityLog: row.priorityLog,
+                keyLearning: row.keyLearning,
+                notesLog: row.notesLog || ""
+            };
         }
 
         function viewDetail(row) {
