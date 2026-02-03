@@ -75,6 +75,26 @@
         /* QUILL LIST CORRECTION */
         #detContent.ql-editor { padding: 20px !important; height: auto; overflow-y: visible; }
         #detContent.ql-editor ol, #detContent.ql-editor ul { padding-left: 1.5em; }
+
+        /* Gaya untuk Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            z-index: 3000;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }    
     </style>
 </head>
 <body>
@@ -162,6 +182,7 @@
         </div>
     </div>
 
+    <div id="toast" class="toast">Data tidak ada perubahan</div>
     <script>
         const SUPABASE_URL = "https://eqvvznninjlxuijmazxi.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxdnZ6bm5pbmpseHVpam1henhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMDI2OTQsImV4cCI6MjA4NTU3ODY5NH0.KaBBl4zeybCtxBDm9bR6R8v-shlkns2MjvKL2VuvgpQ";
@@ -252,7 +273,7 @@
         }
 
         document.getElementById('workForm').onsubmit = async (e) => {
-            e.preventDefault();
+                    e.preventDefault();
             const id = document.getElementById('editId').value;
             const currentPayload = {
                 logDate: document.getElementById('logDate').value,
@@ -262,9 +283,11 @@
                 notesLog: quill.root.innerHTML.trim()
             };
 
+            // Jika data sama, tampilkan toast cantik lalu tutup modal
             if (id && JSON.stringify(currentPayload) === JSON.stringify(originalData)) {
-                alert("Tidak ada data yang berubah.");
-                return closeModal();
+                showToast("Tidak ada perubahan data."); // Memanggil toast menarik
+                closeModal();
+                return; 
             }
 
             const btn = document.getElementById('btnSave');
@@ -294,7 +317,16 @@
             const val = document.getElementById('globalSearch').value.toLowerCase();
             document.querySelectorAll('#tableBody tr').forEach(r => r.style.display = r.innerText.toLowerCase().includes(val) ? '' : 'none');
         }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
     </script>
 </body>
 </html>
-
