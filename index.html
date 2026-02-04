@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logsheet Ivan</title>
+    <title>WorkLog Pro | No Priority</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -19,43 +19,19 @@
             --text: #1f2937;
             --text-light: #6b7280;
             --border: #e5e7eb;
-            --error: #ef4444;
         }
 
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        /* --- LOGIN PAGE --- */
-        .auth-wrapper { 
-            height: 100vh; display: flex; align-items: center; justify-content: center; 
-            background: #000; position: fixed; inset: 0; z-index: 2000;
-        }
-        .login-box { 
-            background: white; padding: 40px; border-radius: 24px; 
-            width: 100%; max-width: 400px; text-align: center; 
-        }
-        .btn-submit { width: 100%; padding: 15px; background: #000; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        /* AUTH */
+        .auth-wrapper { height: 100vh; display: flex; align-items: center; justify-content: center; background: #000; position: fixed; inset: 0; z-index: 2000; }
+        .login-box { background: white; padding: 40px; border-radius: 24px; width: 100%; max-width: 400px; text-align: center; }
 
-        /* --- LAYOUT --- */
+        /* LAYOUT */
         .app-layout { display: flex; min-height: 100vh; }
-       .app-sidebar { 
-            width: 280px; 
-            background: white; 
-            border-right: 1px solid var(--border); 
-            display: flex; 
-            flex-direction: column; 
-            position: fixed; 
-            height: 100vh; 
-            z-index: 100; 
-            transition: transform 0.3s ease; /* Tambahkan transition */
-        }
-        .app-main { 
-            flex: 1; 
-            margin-left: 280px; 
-            padding: 40px; 
-            transition: margin-left 0.3s ease; /* Tambahkan transition */
-        }
-        /* Saat class sidebar-hide aktif di body */
+        .app-sidebar { width: 280px; background: white; border-right: 1px solid var(--border); position: fixed; height: 100vh; z-index: 100; transition: transform 0.3s ease; }
+        .app-main { flex: 1; margin-left: 280px; padding: 40px; transition: margin-left 0.3s ease; }
         .sidebar-hide .app-sidebar { transform: translateX(-280px); }
         .sidebar-hide .app-main { margin-left: 0; }
 
@@ -71,42 +47,25 @@
         table { width: 100%; border-collapse: collapse; }
         th { text-align: left; padding: 15px 30px; background: #fafafa; font-size: 11px; text-transform: uppercase; color: var(--text-light); }
         td { padding: 18px 30px; border-bottom: 1px solid var(--border); font-size: 14px; }
-        .badge { padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 10px; text-transform: uppercase; }
-        .badge.high { background: #fee2e2; color: #ef4444; }
-        .badge.medium { background: #fef3c7; color: #d97706; }
-        .badge.low { background: #dcfce7; color: #16a34a; }
+        .badge { padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 10px; text-transform: uppercase; background: #eee; color: #555; }
 
         /* MODAL */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 1500; display: flex; align-items: center; justify-content: center; }
-        .modal-box { background: white; width: 100%; max-width: 650px; max-height: 85vh; overflow-y: auto; border-radius: 24px; padding: 40px; }
+        .modal-box { background: white; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; border-radius: 24px; padding: 40px; }
         .f-group { margin-bottom: 20px; }
         .f-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
-        .f-group input, .f-group select { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 14px; outline: none; }
-        .rich-editor { height: 150px; border-radius: 12px; margin-bottom: 40px; }
+        .f-group input { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 14px; outline: none; }
         
-        /* QUILL LIST CORRECTION */
-        #detContent.ql-editor { padding: 20px !important; height: auto; overflow-y: visible; }
-        #detContent.ql-editor ol, #detContent.ql-editor ul { padding-left: 1.5em; }
+        .rich-editor { height: 350px; border-radius: 0 0 12px 12px; margin-bottom: 20px; }
+        .ql-toolbar.ql-snow { border-radius: 12px 12px 0 0; background: #fafafa; }
 
-        /* Gaya untuk Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #333;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-            z-index: 3000;
-        }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-        }    
+        /* TOAST */
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #333; color: white; padding: 12px 24px; border-radius: 12px; font-size: 14px; transition: 0.3s; z-index: 3000; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        
+        /* QUILL DETAIL CORRECTION */
+        #detContent.ql-editor { padding: 20px !important; height: auto; }
+        #detContent.ql-editor ol, #detContent.ql-editor ul { padding-left: 1.5em; }
     </style>
 </head>
 <body class="sidebar-hide">
@@ -114,19 +73,16 @@
     <div id="loginPage" class="auth-wrapper">
         <div class="login-box">
             <h2 style="font-weight:800; font-size:28px;">WorkLog<span style="color:var(--accent)">.</span></h2>
-            <p style="color:gray; margin-bottom:30px;">Silahkan masukkan akses</p>
-            <input type="password" id="password" placeholder="Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid #ddd; margin-bottom:20px; outline:none; text-align:center; font-size:16px;">
-            <button onclick="handleLogin()" id="btnLogin" class="btn-submit">Sign In</button>
-            <p id="loginError" style="color:red; font-size:13px; margin-top:10px;"></p>
+            <input type="password" id="password" placeholder="Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid #ddd; margin-bottom:20px; text-align:center;">
+            <button onclick="handleLogin()" class="btn-add" style="width:100%; justify-content:center;">Sign In</button>
+            <p id="loginError" style="color:red; font-size:12px; margin-top:10px;"></p>
         </div>
     </div>
 
     <div id="mainDashboard" class="app-layout" style="display: none;">
-        <aside id="sidebar" class="app-sidebar">
+        <aside class="app-sidebar">
             <div style="padding:30px; font-size:24px; font-weight:800;">WorkLog<span style="color:var(--accent)">.</span></div>
-            <nav style="flex:1; padding:0 20px;">
-                <div style="display:flex; gap:15px; padding:15px; background:#f3f4f6; border-radius:12px; font-weight:600;"><i data-lucide="layout-dashboard"></i> Overview</div>
-            </nav>
+            <nav style="padding:0 20px;"><div style="display:flex; gap:15px; padding:15px; background:#f3f4f6; border-radius:12px; font-weight:600;"><i data-lucide="layout-dashboard"></i> Overview</div></nav>
         </aside>
 
         <main class="app-main">
@@ -136,14 +92,14 @@
                     <div><h2 id="digitalClock" style="margin:0">00:00</h2><span id="currentDate" style="color:gray; font-size:13px;">Date</span></div>
                 </div>
                 <div style="display:flex; gap:15px;">
-                    <div class="search-bar"><i data-lucide="search" style="color:gray; width:18px"></i><input type="text" id="globalSearch" placeholder="Cari learning..." onkeyup="filterTable()"></div>
+                    <div class="search-bar"><i data-lucide="search" style="color:gray; width:18px"></i><input type="text" id="globalSearch" placeholder="Cari..." onkeyup="filterTable()"></div>
                     <button onclick="openModal()" class="btn-add"><i data-lucide="plus"></i> New Entry</button>
                 </div>
             </header>
 
             <div class="table-wrapper">
                 <table>
-                    <thead><tr><th>Date</th><th>Category</th><th style="width:50%">Key Learning</th><th>Priority</th><th>Action</th></tr></thead>
+                    <thead><tr><th>Date</th><th>Category</th><th style="width:60%">Key Learning</th><th>Action</th></tr></thead>
                     <tbody id="tableBody"></tbody>
                 </table>
             </div>
@@ -152,22 +108,14 @@
 
     <div id="modalOverlay" class="modal-overlay" style="display: none;">
         <div class="modal-box">
-            <h2 id="modalTitle" style="margin-top:0">New Entry</h2>
+            <h2 id="modalTitle">New Entry</h2>
             <form id="workForm">
                 <input type="hidden" id="editId">
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
                     <div class="f-group"><label>Log Date</label><input type="date" id="logDate" required></div>
-                    <div class="f-group"><label>Entry #</label><input type="text" id="entryCount" readonly style="background:#f9fafb;"></div>
-                </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
                     <div class="f-group"><label>Category</label><input type="text" id="categoryLog" list="categoryList" required><datalist id="categoryList"></datalist></div>
-                    <div class="f-group">
-                        <label>Priority</label>
-                        <select id="priorityLog" style="width:100%; padding:12px; border-radius:12px; border:1.5px solid var(--border);">
-                            <option value="Low">Low</option><option value="Medium" selected>Medium</option><option value="High">High</option>
-                        </select>
-                    </div>
                 </div>
+                <input type="hidden" id="entryCount">
                 <div class="f-group"><label>Key Learning</label><input type="text" id="keyLearning" required></div>
                 <div class="f-group"><label>Action Items / Notes</label><div id="editorNotes" class="rich-editor"></div></div>
                 <div style="display:flex; gap:15px;">
@@ -179,22 +127,22 @@
     </div>
 
     <div id="detailOverlay" class="modal-overlay" style="display: none;">
-        <div class="modal-box" style="max-width: 700px; border-left: 8px solid var(--accent);">
+        <div class="modal-box" style="border-left: 8px solid var(--accent);">
             <div style="display:flex; justify-content:space-between; align-items:start;">
                 <div>
-                    <span id="detBadge" class="badge">Priority</span>
-                    <h1 id="detTitle" style="margin:10px 0 5px 0;">Title</h1>
+                    <h1 id="detTitle" style="margin:0 0 5px 0;">Title</h1>
                     <small id="detMeta" style="color:gray; font-weight:600;"></small>
                 </div>
                 <button onclick="closeDetail()" style="border:none; background:none; cursor:pointer;"><i data-lucide="x"></i></button>
             </div>
             <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
-            <div id="detContent" class="ql-editor" style="background:#f9fafb; border-radius:16px; border:1px solid var(--border); min-height:100px;"></div>
-            <button onclick="closeDetail()" style="width:100%; margin-top:20px; padding:15px; border-radius:12px; border:none; background:black; color:white; font-weight:700; cursor:pointer;">Close</button>
+            <div id="detContent" class="ql-editor" style="background:#f9fafb; border-radius:16px; border:1px solid var(--border); min-height:150px;"></div>
+            <button onclick="closeDetail()" style="width:100%; margin-top:20px; padding:15px; border-radius:12px; background:black; color:white; font-weight:700; border:none; cursor:pointer;">Close</button>
         </div>
     </div>
 
-    <div id="toast" class="toast">Data tidak ada perubahan</div>
+    <div id="toast" class="toast"></div>
+
     <script>
         const SUPABASE_URL = "https://eqvvznninjlxuijmazxi.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxdnZ6bm5pbmpseHVpam1henhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMDI2OTQsImV4cCI6MjA4NTU3ODY5NH0.KaBBl4zeybCtxBDm9bR6R8v-shlkns2MjvKL2VuvgpQ";
@@ -220,9 +168,7 @@
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('mainDashboard').style.display = 'flex';
                 loadData();
-            } else {
-                document.getElementById('loginError').innerText = "Password Salah!";
-            }
+            } else { document.getElementById('loginError').innerText = "Password Salah!"; }
         }
 
         async function loadData() {
@@ -237,9 +183,8 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${row.logDate}</td>
-                    <td><span class="badge" style="background:#eee; color:black">${row.categoryLog}</span></td>
+                    <td><span class="badge">${row.categoryLog}</span></td>
                     <td style="font-weight:600">${row.keyLearning}</td>
-                    <td><span class="badge ${(row.priorityLog || '').toLowerCase()}">${row.priorityLog}</span></td>
                     <td>
                         <div style="display:flex; gap:10px;">
                             <button onclick='viewDetail(${JSON.stringify(row)})' style="border:none; background:none; cursor:pointer; color:#3b82f6;"><i data-lucide="eye" style="width:18px"></i></button>
@@ -264,59 +209,55 @@
 
         function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
 
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
         function editLog(row) {
             document.getElementById('modalOverlay').style.display = 'flex';
-            document.getElementById('modalTitle').innerText = "Edit Entry";
             document.getElementById('editId').value = row.id;
             document.getElementById('logDate').value = row.logDate;
-            document.getElementById('entryCount').value = row.entryCount;
             document.getElementById('categoryLog').value = row.categoryLog;
-            document.getElementById('priorityLog').value = row.priorityLog;
             document.getElementById('keyLearning').value = row.keyLearning;
             quill.root.innerHTML = row.notesLog || "";
 
             originalData = {
                 logDate: row.logDate,
                 categoryLog: row.categoryLog,
-                priorityLog: row.priorityLog,
                 keyLearning: row.keyLearning,
                 notesLog: quill.root.innerHTML.trim()
             };
         }
 
         document.getElementById('workForm').onsubmit = async (e) => {
-                    e.preventDefault();
+            e.preventDefault();
             const id = document.getElementById('editId').value;
             const currentPayload = {
                 logDate: document.getElementById('logDate').value,
                 categoryLog: document.getElementById('categoryLog').value,
-                priorityLog: document.getElementById('priorityLog').value,
                 keyLearning: document.getElementById('keyLearning').value,
                 notesLog: quill.root.innerHTML.trim()
             };
 
-            // Jika data sama, tampilkan toast cantik lalu tutup modal
             if (id && JSON.stringify(currentPayload) === JSON.stringify(originalData)) {
-                showToast("Tidak ada perubahan data."); // Memanggil toast menarik
-                closeModal();
-                return; 
+                showToast("Tidak ada perubahan.");
+                return closeModal();
             }
 
             const btn = document.getElementById('btnSave');
             btn.innerText = "Saving..."; btn.disabled = true;
-            currentPayload.entryCount = parseInt(document.getElementById('entryCount').value);
 
-            let res = id ? await _supabase.from('logData').update(currentPayload).eq('id', id) : await _supabase.from('logData').insert([currentPayload]);
+            let res = id ? await _supabase.from('logData').update(currentPayload).eq('id', id) : await _supabase.from('logData').insert([{...currentPayload, entryCount: parseInt(document.getElementById('entryCount').value)}]);
 
-            if(!res.error) { closeModal(); loadData(); }
+            if(!res.error) { closeModal(); loadData(); showToast("Berhasil disimpan!"); }
             else { alert("Error: " + res.error.message); }
             btn.innerText = "Save Data"; btn.disabled = false;
         };
 
         function viewDetail(row) {
             document.getElementById('detailOverlay').style.display = 'flex';
-            document.getElementById('detBadge').innerText = row.priorityLog;
-            document.getElementById('detBadge').className = `badge ${row.priorityLog.toLowerCase()}`;
             document.getElementById('detTitle').innerText = row.keyLearning;
             document.getElementById('detMeta').innerText = `Log #${row.entryCount} • ${row.categoryLog} • ${row.logDate}`;
             document.getElementById('detContent').innerHTML = row.notesLog || "No notes.";
@@ -328,16 +269,6 @@
         function filterTable() {
             const val = document.getElementById('globalSearch').value.toLowerCase();
             document.querySelectorAll('#tableBody tr').forEach(r => r.style.display = r.innerText.toLowerCase().includes(val) ? '' : 'none');
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.innerText = message;
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2000);
         }
     </script>
 </body>
