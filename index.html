@@ -180,7 +180,20 @@
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             setInterval(startTime, 1000);
-            quill = new Quill('#editorNotes', { theme: 'snow', modules: { toolbar: [['bold', 'italic'], [{ 'list': 'bullet' }, { 'list': 'ordered' }]] } });
+            
+            // Inisialisasi Quill
+            quill = new Quill('#editorNotes', { 
+                theme: 'snow', 
+                modules: { toolbar: [['bold', 'italic'], [{ 'list': 'bullet' }, { 'list': 'ordered' }]] } 
+            });
+
+            // FITUR ENTER UNTUK LOGIN
+            const passwordInput = document.getElementById('password');
+            passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleLogin();
+                }
+            });
         });
 
         function startTime() {
@@ -190,10 +203,16 @@
         }
 
         function handleLogin() {
-            if(document.getElementById('password').value === '123') {
+            const pass = document.getElementById('password').value;
+            const loginError = document.getElementById('loginError');
+            
+            if(pass === '123') {
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('mainDashboard').style.display = 'flex';
-                switchTab('log');
+                switchTab('log'); // Memastikan data langsung load setelah login
+            } else {
+                loginError.innerText = "Password Salah!";
+                document.getElementById('password').value = ""; // Reset kolom biar bisa ketik ulang langsung
             }
         }
 
