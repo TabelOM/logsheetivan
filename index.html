@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WorkLog Pro | Responsive</title>
+    <title>WorkLog Pro | Final Version</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -30,13 +30,11 @@
 
         /* --- LAYOUT --- */
         .app-layout { display: flex; min-height: 100vh; }
-        .app-sidebar { width: 280px; background: white; border-right: 1px solid var(--border); position: fixed; height: 100vh; z-index: 100; transition: transform 0.3s ease;  }
+        .app-sidebar { width: 280px; background: white; border-right: 1px solid var(--border); position: fixed; height: 100vh; z-index: 100; transition: transform 0.3s ease; }
         .app-main { flex: 1; margin-left: 280px; padding: 20px; transition: margin-left 0.3s ease; }
-        
         .sidebar-hide .app-sidebar { transform: translateX(-280px); }
         .sidebar-hide .app-main { margin-left: 0; }
 
-        /* NAV ITEM */
         .nav-item { display:flex; gap:15px; padding:15px; border-radius:12px; font-weight:600; cursor:pointer; margin: 0 20px 5px 20px; transition: 0.2s; color: var(--text-light); }
         .nav-item:hover { background: #f3f4f6; color: var(--text); }
         .nav-item.active { background: #000; color: white; }
@@ -45,44 +43,43 @@
         .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; gap: 10px; flex-wrap: wrap; }
         .btn-round { width: 45px; height: 45px; border-radius: 12px; border: 1px solid var(--border); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .search-bar { background: white; display: flex; align-items: center; padding: 0 15px; border-radius: 12px; border: 1px solid var(--border); flex: 1; min-width: 200px; }
-        .search-bar input { border: none; outline: none; margin-left: 10px; width: 100%; height: 45px; font-size: 14px; }
+        .search-bar input { border: none; outline: none; margin-left: 10px; width: 100%; height: 45px; }
         .btn-add { background: black; color: white; border: none; padding: 0 20px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; height: 45px; }
 
-        /* TABLE & RESPONSIVE CARD */
+        /* TABLE */
         .table-wrapper { background: white; border-radius: 20px; border: 1px solid var(--border); overflow: hidden; }
         table { width: 100%; border-collapse: collapse; }
         th { text-align: left; padding: 15px 30px; background: #fafafa; font-size: 11px; text-transform: uppercase; color: var(--text-light); }
         td { padding: 18px 30px; border-bottom: 1px solid var(--border); font-size: 14px; }
 
+        /* STATUS BUTTONS */
+        .status-btn { 
+            border: none; padding: 8px 16px; border-radius: 10px; font-size: 11px; font-weight: 700; 
+            text-transform: uppercase; cursor: default; display: inline-flex; align-items: center; gap: 5px;
+        }
+        .btn-todo { background: #f3f4f6; color: #4b5563; border: 1px solid #d1d5db; }
+        .btn-progress { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .btn-done { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+
         /* MODAL */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 1500; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .modal-box { background: white; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; border-radius: 24px; padding: 30px; position: relative; }
+        .modal-box { background: white; width: 100%; max-width: 750px; max-height: 90vh; overflow-y: auto; border-radius: 24px; padding: 30px; }
         .f-group { margin-bottom: 15px; }
         .f-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
-        .f-group input, .f-group select, .f-group textarea { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 14px; outline: none; }
+        .f-group input, .f-group select { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 12px; font-size: 14px; outline: none; }
         
-        .rich-editor { height: 300px; border-radius: 0 0 12px 12px; margin-bottom: 20px; }
+        .rich-editor { height: 250px; border-radius: 0 0 12px 12px; margin-bottom: 20px; }
         .ql-toolbar.ql-snow { border-radius: 12px 12px 0 0; background: #fafafa; }
 
-        /* TOAST */
-        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #333; color: white; padding: 12px 24px; border-radius: 12px; font-size: 14px; transition: 0.3s; z-index: 3000; white-space: nowrap; }
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #333; color: white; padding: 12px 24px; border-radius: 12px; font-size: 14px; transition: 0.3s; z-index: 3000; }
         .toast.show { transform: translateX(-50%) translateY(0); }
 
-        /* --- MOBILE ADAPTIVE --- */
         @media (max-width: 768px) {
-            .app-main { margin-left: 0; padding: 15px; }
-            .app-sidebar { transform: translateX(-280px); }
-            .sidebar-hide .app-sidebar { transform: translateX(0); } /* Kebalik di HP untuk menu drawer */
-            
-            /* Sembunyikan Header Tabel */
+            .app-main { margin-left: 0; }
             thead { display: none; }
-            tr { display: block; background: white; border: 1px solid var(--border); border-radius: 16px; margin-bottom: 15px; padding: 15px; }
+            tr { display: block; border: 1px solid var(--border); border-radius: 16px; margin-bottom: 15px; padding: 15px; background: white; }
             td { display: block; padding: 5px 0; border: none; }
-            td:before { content: attr(data-label); font-weight: 700; font-size: 11px; color: var(--text-light); display: block; text-transform: uppercase; margin-bottom: 2px; }
-            
-            .main-header { flex-direction: column; align-items: stretch; }
-            .search-bar { width: 100%; }
-            .btn-add { width: 100%; justify-content: center; }
+            td:before { content: attr(data-label); font-weight: 700; font-size: 10px; color: var(--text-light); text-transform: uppercase; display: block; }
         }
     </style>
 </head>
@@ -90,8 +87,8 @@
 
     <div id="loginPage" class="auth-wrapper">
         <div class="login-box">
-            <h2 style="font-weight:800; font-size:28px;">WorkLog<span style="color:var(--accent)">.</span></h2>
-            <input type="password" id="password" placeholder="Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid #ddd; margin-bottom:20px; text-align:center; font-size:16px;">
+            <h2 style="font-weight:800;">WorkLog<span style="color:var(--accent)">.</span></h2>
+            <input type="password" id="password" placeholder="Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid #ddd; margin-bottom:20px; text-align:center;">
             <button onclick="handleLogin()" class="btn-add" style="width:100%; justify-content:center;">Sign In</button>
         </div>
     </div>
@@ -108,17 +105,17 @@
         <main class="app-main">
             <header class="main-header">
                 <div style="display:flex; gap:15px; align-items:center;">
-                    <button onclick="document.body.classList.toggle('sidebar-hide')" class="btn-round"><i data-lucide="menu"></i></button>
+                    <button id="menuBtn" onclick="document.body.classList.toggle('sidebar-hide')" class="btn-round"><i data-lucide="menu"></i></button>
                     <div><h3 id="digitalClock" style="margin:0">00:00</h3><span id="currentDate" style="color:gray; font-size:12px;">Date</span></div>
                 </div>
-                <div style="display:flex; gap:10px; flex: 1; justify-content: flex-end;">
+                <div style="display:flex; gap:10px; flex:1; justify-content:flex-end;">
                     <div class="search-bar"><i data-lucide="search" style="color:gray; width:16px"></i><input type="text" id="globalSearch" placeholder="Cari..." onkeyup="filterTable()"></div>
-                    <button onclick="handleNewEntry()" class="btn-add"><i data-lucide="plus"></i> <span class="btn-text">New</span></button>
+                    <button onclick="handleNewEntry()" class="btn-add"><i data-lucide="plus"></i> New</button>
                 </div>
             </header>
 
             <div class="table-wrapper">
-                <table id="mainTable">
+                <table>
                     <thead id="tableHead"></thead>
                     <tbody id="tableBody"></tbody>
                 </table>
@@ -133,10 +130,10 @@
                 <input type="hidden" id="editId">
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px;">
                     <div class="f-group"><label>Log Date</label><input type="date" id="logDate" required></div>
-                    <div class="f-group"><label>Category</label><input type="text" id="categoryLog" list="categoryList" required><datalist id="categoryList"></datalist></div>
+                    <div class="f-group"><label>Category</label><input type="text" id="categoryLog" required></div>
                 </div>
                 <div class="f-group"><label>Key Learning</label><input type="text" id="keyLearning" required></div>
-                <div class="f-group"><label>Action Items / Notes</label><div id="editorNotes" class="rich-editor"></div></div>
+                <div class="f-group"><label>Notes</label><div id="editorLog" class="rich-editor"></div></div>
                 <div style="display:flex; gap:10px;">
                     <button type="button" onclick="closeModal('modalLog')" style="flex:1; padding:15px; border-radius:12px; border:1px solid #ddd; background:white; font-weight:700;">Cancel</button>
                     <button type="submit" class="btn-add" style="flex:1; justify-content:center;">Save</button>
@@ -146,12 +143,12 @@
     </div>
 
     <div id="modalPlan" class="modal-overlay" style="display: none;">
-        <div class="modal-box" style="max-width: 450px;">
+        <div class="modal-box">
             <h2 id="modalTitlePlan">Learning Plan</h2>
             <form id="planForm">
                 <input type="hidden" id="planEditId">
-                <div class="f-group"><label>Topic</label><input type="text" id="planTopic" required></div>
-                <div class="f-group"><label>Keterangan</label><textarea id="planDesc" rows="4"></textarea></div>
+                <div class="f-group"><label>Topic to Learn</label><input type="text" id="planTopic" required></div>
+                <div class="f-group"><label>Keterangan (Materi/Poin)</label><div id="editorPlan" class="rich-editor"></div></div>
                 <div class="f-group">
                     <label>Status</label>
                     <select id="planStatus">
@@ -160,9 +157,9 @@
                         <option value="Completed">Completed</option>
                     </select>
                 </div>
-                <div style="display:flex; gap:10px; margin-top:20px;">
+                <div style="display:flex; gap:10px;">
                     <button type="button" onclick="closeModal('modalPlan')" style="flex:1; padding:15px; border-radius:12px; border:1px solid #ddd; background:white; font-weight:700;">Cancel</button>
-                    <button type="submit" class="btn-add" style="flex:1; justify-content:center;">Save</button>
+                    <button type="submit" class="btn-add" style="flex:1; justify-content:center;">Save Plan</button>
                 </div>
             </form>
         </div>
@@ -170,10 +167,10 @@
 
     <div id="detailOverlay" class="modal-overlay" style="display: none;">
         <div class="modal-box" style="border-left: 8px solid var(--accent);">
-            <h2 id="detTitle" style="margin:0 0 5px 0;">Title</h2>
+            <h2 id="detTitle" style="margin:0">Title</h2>
             <small id="detMeta" style="color:gray; font-weight:600;"></small>
             <hr style="border:0; border-top:1px solid var(--border); margin:15px 0;">
-            <div id="detContent" class="ql-editor" style="background:#f9fafb; border-radius:16px; border:1px solid var(--border); min-height:100px; padding:15px; white-space: pre-wrap;"></div>
+            <div id="detContent" class="ql-editor" style="background:#f9fafb; border-radius:16px; padding:15px; min-height:100px;"></div>
             <button onclick="closeModal('detailOverlay')" style="width:100%; margin-top:20px; padding:15px; border-radius:12px; background:black; color:white; font-weight:700; border:none;">Close</button>
         </div>
     </div>
@@ -185,13 +182,25 @@
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxdnZ6bm5pbmpseHVpam1henhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMDI2OTQsImV4cCI6MjA4NTU3ODY5NH0.KaBBl4zeybCtxBDm9bR6R8v-shlkns2MjvKL2VuvgpQ";
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
-        let quill, currentTab = 'log', originalLogData = {}, originalPlanData = {};
+        let quillLog, quillPlan, currentTab = 'log';
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             setInterval(startTime, 1000);
-            quill = new Quill('#editorNotes', { theme: 'snow', modules: { toolbar: [['bold', 'italic'], [{ 'list': 'bullet' }, { 'list': 'ordered' }]] } });
+            const toolbarOptions = [['bold', 'italic'], [{ 'list': 'ordered'}, { 'list': 'bullet' }]];
+            quillLog = new Quill('#editorLog', { theme: 'snow', modules: { toolbar: toolbarOptions } });
+            quillPlan = new Quill('#editorPlan', { theme: 'snow', modules: { toolbar: toolbarOptions } });
+            
             document.getElementById('password').addEventListener('keypress', e => { if(e.key === 'Enter') handleLogin(); });
+            
+            // Click Outside Sidebar
+            document.addEventListener('click', (e) => {
+                const sidebar = document.querySelector('.app-sidebar');
+                const menuBtn = document.getElementById('menuBtn');
+                if (!document.body.classList.contains('sidebar-hide') && sidebar && !sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                    document.body.classList.add('sidebar-hide');
+                }
+            });
         });
 
         function startTime() {
@@ -215,27 +224,25 @@
             const tableHead = document.getElementById('tableHead');
             
             if(tab === 'plan') {
-                tableHead.innerHTML = `<tr><th>Topic</th><th>Status</th><th>Action</th></tr>`;
+                tableHead.innerHTML = `<tr><th>Topic</th><th>Keterangan</th><th>Action</th><th style="text-align:center">Status</th></tr>`;
                 loadPlanData();
             } else {
                 tableHead.innerHTML = `<tr><th>Date</th><th>Category</th><th>Key Learning</th><th>Action</th></tr>`;
                 loadLogData();
             }
-            if(window.innerWidth <= 768) document.body.classList.add('sidebar-hide');
         }
 
         async function loadLogData() {
             const { data } = await _supabase.from('logData').select('*').order('logDate', { ascending: false });
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = (data || []).map(row => `
+            document.getElementById('tableBody').innerHTML = (data || []).map(row => `
                 <tr>
                     <td data-label="Date">${row.logDate}</td>
-                    <td data-label="Category"><span class="badge">${row.categoryLog}</span></td>
+                    <td data-label="Category"><span class="badge" style="background:#eee; padding:4px 8px; border-radius:5px; font-size:11px;">${row.categoryLog}</span></td>
                     <td data-label="Key Learning" style="font-weight:600">${row.keyLearning}</td>
                     <td data-label="Action">
                         <div style="display:flex; gap:10px;">
-                            <button onclick='viewLog(${JSON.stringify(row)})' style="border:none; background:none; color:#3b82f6;"><i data-lucide="eye"></i></button>
-                            <button onclick='editLog(${JSON.stringify(row)})' style="border:none; background:none; color:#666;"><i data-lucide="edit-3"></i></button>
+                            <button onclick='viewDetail("log", ${JSON.stringify(row)})' style="border:none; background:none; color:#3b82f6; cursor:pointer;"><i data-lucide="eye"></i></button>
+                            <button onclick='editLog(${JSON.stringify(row)})' style="border:none; background:none; color:#666; cursor:pointer;"><i data-lucide="edit-3"></i></button>
                         </div>
                     </td>
                 </tr>
@@ -245,34 +252,37 @@
 
         async function loadPlanData() {
             const { data } = await _supabase.from('learningPlan').select('*').order('created_at', { ascending: false });
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = (data || []).map(row => `
+            document.getElementById('tableBody').innerHTML = (data || []).map(row => {
+                let sClass = row.status === 'Completed' ? 'btn-done' : row.status === 'In Progress' ? 'btn-progress' : 'btn-todo';
+                return `
                 <tr>
                     <td data-label="Topic" style="font-weight:600">${row.topic}</td>
-                    <td data-label="Status"><span class="badge" style="background:black; color:white">${row.status}</span></td>
+                    <td data-label="Keterangan"><button onclick='viewDetail("plan", ${JSON.stringify(row)})' style="border:1px solid #ddd; background:white; padding:5px 10px; border-radius:8px; font-size:12px; cursor:pointer;">Lihat Materi</button></td>
                     <td data-label="Action">
                         <div style="display:flex; gap:10px;">
-                            <button onclick='viewPlan(${JSON.stringify(row)})' style="border:none; background:none; color:#3b82f6;"><i data-lucide="eye"></i></button>
-                            <button onclick='editPlan(${JSON.stringify(row)})' style="border:none; background:none; color:#666;"><i data-lucide="edit-3"></i></button>
-                            <button onclick='deletePlan("${row.id}")' style="border:none; background:none; color:red;"><i data-lucide="trash-2"></i></button>
+                            <button onclick='editPlan(${JSON.stringify(row)})' style="border:none; background:none; color:#666; cursor:pointer;"><i data-lucide="edit-3"></i></button>
+                            <button onclick='deletePlan("${row.id}")' style="border:none; background:none; color:red; cursor:pointer;"><i data-lucide="trash-2"></i></button>
                         </div>
                     </td>
-                </tr>
-            `).join('');
+                    <td data-label="Status" style="text-align:center">
+                        <button class="status-btn ${sClass}">${row.status}</button>
+                    </td>
+                </tr>`;
+            }).join('');
             lucide.createIcons();
         }
 
         function handleNewEntry() {
             if(currentTab === 'log') {
                 document.getElementById('modalLog').style.display = 'flex';
-                document.getElementById('logForm').reset();
-                quill.setContents([]);
+                document.getElementById('logForm').reset(); quillLog.setContents([]);
                 document.getElementById('editId').value = "";
                 document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
             } else {
                 document.getElementById('modalPlan').style.display = 'flex';
-                document.getElementById('planForm').reset();
+                document.getElementById('planForm').reset(); quillPlan.setContents([]);
                 document.getElementById('planEditId').value = "";
+                document.getElementById('planStatus').value = "To Do"; // Default Initial
             }
         }
 
@@ -290,11 +300,10 @@
                 logDate: document.getElementById('logDate').value,
                 categoryLog: document.getElementById('categoryLog').value,
                 keyLearning: document.getElementById('keyLearning').value,
-                notesLog: quill.root.innerHTML.trim()
+                notesLog: quillLog.root.innerHTML
             };
-            if (id && JSON.stringify(payload) === JSON.stringify(originalLogData)) return closeModal('modalLog');
             let res = id ? await _supabase.from('logData').update(payload).eq('id', id) : await _supabase.from('logData').insert([payload]);
-            if(!res.error) { closeModal('modalLog'); loadLogData(); showToast("Tersimpan!"); }
+            if(!res.error) { closeModal('modalLog'); loadLogData(); showToast("Log Tersimpan!"); }
         };
 
         document.getElementById('planForm').onsubmit = async (e) => {
@@ -302,47 +311,41 @@
             const id = document.getElementById('planEditId').value;
             const payload = {
                 topic: document.getElementById('planTopic').value,
-                description: document.getElementById('planDesc').value,
+                description: quillPlan.root.innerHTML,
                 status: document.getElementById('planStatus').value
             };
-            if (id && JSON.stringify(payload) === JSON.stringify(originalPlanData)) return closeModal('modalPlan');
             let res = id ? await _supabase.from('learningPlan').update(payload).eq('id', id) : await _supabase.from('learningPlan').insert([payload]);
             if(!res.error) { closeModal('modalPlan'); loadPlanData(); showToast("Plan Tersimpan!"); }
         };
 
         function editLog(row) {
             handleNewEntry();
-            document.getElementById('modalTitleLog').innerText = "Edit Log";
             document.getElementById('editId').value = row.id;
             document.getElementById('logDate').value = row.logDate;
             document.getElementById('categoryLog').value = row.categoryLog;
             document.getElementById('keyLearning').value = row.keyLearning;
-            quill.root.innerHTML = row.notesLog || "";
-            originalLogData = { logDate: row.logDate, categoryLog: row.categoryLog, keyLearning: row.keyLearning, notesLog: quill.root.innerHTML.trim() };
+            quillLog.root.innerHTML = row.notesLog || "";
         }
 
         function editPlan(row) {
             handleNewEntry();
-            document.getElementById('modalTitlePlan').innerText = "Edit Plan";
             document.getElementById('planEditId').value = row.id;
             document.getElementById('planTopic').value = row.topic;
-            document.getElementById('planDesc').value = row.description || "";
             document.getElementById('planStatus').value = row.status;
-            originalPlanData = { topic: row.topic, description: row.description || "", status: row.status };
+            quillPlan.root.innerHTML = row.description || "";
         }
 
-        function viewLog(row) {
+        function viewDetail(type, row) {
             document.getElementById('detailOverlay').style.display = 'flex';
-            document.getElementById('detTitle').innerText = row.keyLearning;
-            document.getElementById('detMeta').innerText = `${row.categoryLog} • ${row.logDate}`;
-            document.getElementById('detContent').innerHTML = row.notesLog || "No notes.";
-        }
-
-        function viewPlan(row) {
-            document.getElementById('detailOverlay').style.display = 'flex';
-            document.getElementById('detTitle').innerText = row.topic;
-            document.getElementById('detMeta').innerText = `Status: ${row.status}`;
-            document.getElementById('detContent').innerText = row.description || "Tidak ada keterangan.";
+            if(type === 'log') {
+                document.getElementById('detTitle').innerText = row.keyLearning;
+                document.getElementById('detMeta').innerText = `${row.categoryLog} • ${row.logDate}`;
+                document.getElementById('detContent').innerHTML = row.notesLog || "No notes.";
+            } else {
+                document.getElementById('detTitle').innerText = row.topic;
+                document.getElementById('detMeta').innerText = `Status: ${row.status}`;
+                document.getElementById('detContent').innerHTML = row.description || "Tidak ada keterangan.";
+            }
         }
 
         async function deletePlan(id) {
@@ -356,21 +359,6 @@
             const val = document.getElementById('globalSearch').value.toLowerCase();
             document.querySelectorAll('#tableBody tr').forEach(r => r.style.display = r.innerText.toLowerCase().includes(val) ? '' : 'none');
         }
-
-        // Fungsi untuk mendeteksi klik di luar sidebar
-        document.addEventListener('click', (e) => {
-            const sidebar = document.querySelector('.app-sidebar');
-            const menuBtn = document.querySelector('.btn-round'); // Tombol hamburger
-            const body = document.body;
-
-            // Cek apakah sidebar sedang TERBUKA (class sidebar-hide tidak ada)
-            const isSidebarOpen = !body.classList.contains('sidebar-hide');
-
-            // Jika sidebar terbuka, DAN yang diklik bukan sidebar, DAN yang diklik bukan tombol menu
-            if (isSidebarOpen && !sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
-                body.classList.add('sidebar-hide');
-            }
-        });
     </script>
 </body>
 </html>
