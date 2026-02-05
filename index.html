@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logsheet Ivan</title>
+    <title>WorkLog Pro | Responsive</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -30,7 +30,7 @@
 
         /* --- LAYOUT --- */
         .app-layout { display: flex; min-height: 100vh; }
-        .app-sidebar { width: 280px; background: white; border-right: 1px solid var(--border); position: fixed; height: 100vh; z-index: 100; transition: transform 0.3s ease; }
+        .app-sidebar { width: 280px; background: white; border-right: 1px solid var(--border); position: fixed; height: 100vh; z-index: 100; transition: transform 0.3s ease;  }
         .app-main { flex: 1; margin-left: 280px; padding: 20px; transition: margin-left 0.3s ease; }
         
         .sidebar-hide .app-sidebar { transform: translateX(-280px); }
@@ -356,7 +356,21 @@
             const val = document.getElementById('globalSearch').value.toLowerCase();
             document.querySelectorAll('#tableBody tr').forEach(r => r.style.display = r.innerText.toLowerCase().includes(val) ? '' : 'none');
         }
+
+        // Fungsi untuk mendeteksi klik di luar sidebar
+        document.addEventListener('click', (e) => {
+            const sidebar = document.querySelector('.app-sidebar');
+            const menuBtn = document.querySelector('.btn-round'); // Tombol hamburger
+            const body = document.body;
+
+            // Cek apakah sidebar sedang TERBUKA (class sidebar-hide tidak ada)
+            const isSidebarOpen = !body.classList.contains('sidebar-hide');
+
+            // Jika sidebar terbuka, DAN yang diklik bukan sidebar, DAN yang diklik bukan tombol menu
+            if (isSidebarOpen && !sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                body.classList.add('sidebar-hide');
+            }
+        });
     </script>
 </body>
 </html>
-
