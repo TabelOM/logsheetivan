@@ -128,7 +128,8 @@
                 </div>
                 <div class="f-group"><label>Key Learning</label><input type="text" id="keyLearning" required></div>
                 <div class="f-group"><label>Notes</label><div id="editorLog" class="rich-editor"></div></div>
-                <div style="display:flex; gap:10px;">
+               <div style="display:flex; gap:10px;">
+                    <button type="button" id="btnDeleteLog" onclick="deleteLogFromForm()" style="display:none; flex:1; padding:15px; border-radius:12px; border:1px solid #ff4d4d; background:#fff5f5; color:#ff4d4d; font-weight:700; cursor:pointer;">Delete</button>
                     <button type="button" onclick="closeModal('modalLog')" style="flex:1; padding:15px; border-radius:12px; border:1px solid #ddd; background:white; font-weight:700;">Cancel</button>
                     <button type="submit" class="btn-add" style="flex:1; justify-content:center;">Save</button>
                 </div>
@@ -163,6 +164,7 @@
                 </div>
 
                 <div style="display:flex; gap:10px; margin-top: 20px;">
+                    <button type="button" id="btnDeletePlan" onclick="deletePlanFromForm()" style="display:none; flex:1; padding:15px; border-radius:12px; border:1px solid #ff4d4d; background:#fff5f5; color:#ff4d4d; font-weight:700; cursor:pointer;">Delete</button>
                     <button type="button" onclick="closeModal('modalPlan')" style="flex:1; padding:15px; border-radius:12px; border:1px solid #ddd; background:white; font-weight:700;">Cancel</button>
                     <button type="submit" class="btn-add" style="flex:1; justify-content:center;">Save Plan</button>
                 </div>
@@ -284,17 +286,19 @@
         }
 
         function handleNewEntry() {
-            if(currentTab === 'log') {
-                document.getElementById('modalLog').style.display = 'flex';
-                document.getElementById('logForm').reset(); quillLog.setContents([]);
-                document.getElementById('editId').value = "";
-                document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
-            } else {
-                document.getElementById('modalPlan').style.display = 'flex';
-                document.getElementById('planForm').reset(); quillPlan.setContents([]);
-                document.getElementById('planEditId').value = "";
+                if(currentTab === 'log') {
+                    document.getElementById('modalLog').style.display = 'flex';
+                    document.getElementById('btnDeleteLog').style.display = 'none'; // Sembunyikan
+                    document.getElementById('logForm').reset(); quillLog.setContents([]);
+                    document.getElementById('editId').value = "";
+                    document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+                } else {
+                    document.getElementById('modalPlan').style.display = 'flex';
+                    document.getElementById('btnDeletePlan').style.display = 'none'; // Sembunyikan
+                    document.getElementById('planForm').reset(); quillPlan.setContents([]);
+                    document.getElementById('planEditId').value = "";
+                }
             }
-        }
 
         document.getElementById('logForm').onsubmit = async (e) => {
             e.preventDefault();
@@ -321,21 +325,25 @@
             if(!res.error) { closeModal('modalPlan'); loadPlanData(); showToast("Plan Tersimpan!"); }
         };
 
-        function editLog(row) {
-            handleNewEntry();
-            document.getElementById('editId').value = row.id;
-            document.getElementById('logDate').value = row.logDate;
-            document.getElementById('categoryLog').value = row.categoryLog;
-            document.getElementById('keyLearning').value = row.keyLearning;
-            quillLog.root.innerHTML = row.notesLog || "";
-        }
+       // Update fungsi editLog
+            function editLog(row) {
+                handleNewEntry();
+                document.getElementById('btnDeleteLog').style.display = 'block'; // Tampilkan saat edit
+                document.getElementById('editId').value = row.id;
+                document.getElementById('logDate').value = row.logDate;
+                document.getElementById('categoryLog').value = row.categoryLog;
+                document.getElementById('keyLearning').value = row.keyLearning;
+                quillLog.root.innerHTML = row.notesLog || "";
+            }
 
-        function editPlan(row) {
-            document.getElementById('modalPlan').style.display = 'flex';
-            document.getElementById('planEditId').value = row.id;
-            document.getElementById('planTopic').value = row.topic;
-            quillPlan.root.innerHTML = row.description || "";
-        }
+        // Update fungsi editPlan
+            function editPlan(row) {
+                document.getElementById('modalPlan').style.display = 'flex';
+                document.getElementById('btnDeletePlan').style.display = 'block'; // Tampilkan saat edit
+                document.getElementById('planEditId').value = row.id;
+                document.getElementById('planTopic').value = row.topic;
+                quillPlan.root.innerHTML = row.description || "";
+            }
 
         function viewDetail(type, row) {
             document.getElementById('detailOverlay').style.display = 'flex';
@@ -384,6 +392,30 @@
             } else {
                 btns[status].classList.add('st-done');
                 btns[status].style.border = '1.5px solid #333';
+            }
+        }
+
+        async function deleteLogFromForm() {
+            const id = document.getElementById('editId').value;
+            if(id && confirm("Hapus log belajar ini secara permanen?")) {
+                const { error } = await _supabase.from('logData').delete().eq('id', id);
+                if(!error) {
+                    closeModal('modalLog');
+                    loadLogData();
+                    showToast("Data Log Berhasil Dihapus");
+                }
+            }
+        }
+
+        async function deletePlanFromForm() {
+            const id = document.getElementById('planEditId').value;
+            if(id && confirm("Hapus rencana belajar ini secara permanen?")) {
+                const { error } = await _supabase.from('learningPlan').delete().eq('id', id);
+                if(!error) {
+                    closeModal('modalPlan');
+                    loadPlanData();
+                    showToast("Data Plan Berhasil Dihapus");
+                }
             }
         }
     </script>
