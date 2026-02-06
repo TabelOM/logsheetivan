@@ -262,8 +262,9 @@
                     <td data-label="Keterangan"><button onclick='viewDetail("plan", ${JSON.stringify(row)})' style="border:1px solid #ddd; background:white; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:12px;">Lihat Materi</button></td>
                     <td data-label="Action">
                         <div style="display:flex; gap:12px;">
-                            <button onclick='editPlan(${JSON.stringify(row)})' style="border:none; background:none; color:#666; cursor:pointer;"><i data-lucide="edit-3" style="width:18px"></i></button>
-                            <button onclick='deletePlan("${row.id}")' style="border:none; background:none; color:red; cursor:pointer;"><i data-lucide="trash-2" style="width:18px"></i></button>
+                            <button onclick='editPlan(${JSON.stringify(row)})' style="border:none; background:none; color:#666; cursor:pointer;">
+                                <i data-lucide="edit-3" style="width:18px"></i>
+                            </button>
                         </div>
                     </td>
                     <td data-label="Status" style="text-align:center">
@@ -274,7 +275,7 @@
                 </tr>`;
             }).join('');
             lucide.createIcons();
-        }
+}
 
         async function toggleStatus(id, currentStatus) {
             let nextStatus = "To Do";
