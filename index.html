@@ -6,7 +6,6 @@
     <title>Logsheet Ivan</title>
     
     <link rel="icon" type="image/png" href="icon.png">
-    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -25,11 +24,9 @@
         * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { margin: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        /* --- AUTH --- */
         .auth-wrapper { height: 100vh; display: flex; align-items: center; justify-content: center; background: #000; position: fixed; inset: 0; z-index: 2000; }
         .login-box { background: white; padding: 40px; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; }
 
-        /* --- LAYOUT --- */
         .app-layout { display: flex; min-height: 100vh; }
         .app-sidebar { width: 280px; background: white; border-right: 1px solid var(--border); position: fixed; height: 100vh; z-index: 100; transition: transform 0.3s ease; }
         .app-main { flex: 1; margin-left: 280px; padding: 20px; transition: margin-left 0.3s ease; }
@@ -40,13 +37,11 @@
         .nav-item { display:flex; gap:15px; padding:15px; border-radius:12px; font-weight:600; cursor:pointer; margin: 0 20px 5px 20px; color: #6b7280; transition: 0.2s; }
         .nav-item.active { background: #000; color: white; }
 
-        /* --- TABLE --- */
         .table-wrapper { background: white; border-radius: 20px; border: 1px solid var(--border); overflow: hidden; margin-top: 10px; }
         table { width: 100%; border-collapse: collapse; }
         th { text-align: left; padding: 15px 30px; background: #fafafa; font-size: 11px; text-transform: uppercase; color: #6b7280; }
         td { padding: 18px 30px; border-bottom: 1px solid var(--border); font-size: 14px; }
 
-        /* --- STATUS BUTTONS (TOGGLE) --- */
         .status-toggle-btn { 
             border: none; padding: 10px 18px; border-radius: 12px; font-size: 11px; font-weight: 800; 
             text-transform: uppercase; cursor: pointer; transition: 0.2s; min-width: 140px;
@@ -56,7 +51,6 @@
         .st-progress { background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; }
         .st-done { background: #000; color: #3ecf8e; border: 1.5px solid #333; }
 
-        /* --- MODAL --- */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 1500; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .modal-box { background: white; width: 100%; max-width: 750px; max-height: 90vh; overflow-y: auto; border-radius: 24px; padding: 30px; }
         .f-group { margin-bottom: 15px; }
@@ -66,7 +60,6 @@
         .rich-editor { height: 250px; border-radius: 0 0 12px 12px; margin-bottom: 20px; }
         .ql-toolbar.ql-snow { border-radius: 12px 12px 0 0; background: #fafafa; }
 
-        /* --- UI HELPERS --- */
         .btn-add { background: black; color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
         .btn-round { width: 45px; height: 45px; border-radius: 12px; border: 1px solid var(--border); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #333; color: white; padding: 12px 24px; border-radius: 12px; transition: 0.3s; z-index: 3000; }
@@ -97,6 +90,7 @@
             <nav>
                 <div onclick="switchTab('log')" id="menuLog" class="nav-item active"><i data-lucide="layout-dashboard"></i> Log Belajar</div>
                 <div onclick="switchTab('plan')" id="menuPlan" class="nav-item"><i data-lucide="book-open"></i> Learning Plan</div>
+                <div onclick="switchTab('todo')" id="menuTodo" class="nav-item"><i data-lucide="check-square"></i> Daily Todo</div>
             </nav>
         </aside>
 
@@ -107,6 +101,7 @@
                     <div><h3 id="digitalClock" style="margin:0">00:00</h3><span id="currentDate" style="color:gray; font-size:12px;">Date</span></div>
                 </div>
                 <div style="display:flex; gap:10px;">
+                    <button onclick="switchTab('todo')" class="btn-round" title="Daily Todo" style="background: var(--accent); color: white; border: none;"><i data-lucide="check-square"></i></button>
                     <button onclick="handleNewEntry()" class="btn-add"><i data-lucide="plus"></i> New Entry</button>
                 </div>
             </header>
@@ -145,17 +140,8 @@
             <h2 id="modalTitlePlan">Learning Plan</h2>
             <form id="planForm">
                 <input type="hidden" id="planEditId">
-                
-                <div class="f-group">
-                    <label>Topic to Learn</label>
-                    <input type="text" id="planTopic" required>
-                </div>
-
-                <div class="f-group">
-                    <label>Keterangan (Materi/Poin)</label>
-                    <div id="editorPlan" class="rich-editor"></div>
-                </div>
-
+                <div class="f-group"><label>Topic to Learn</label><input type="text" id="planTopic" required></div>
+                <div class="f-group"><label>Keterangan</label><div id="editorPlan" class="rich-editor"></div></div>
                 <div class="f-group">
                     <label>Set Status</label>
                     <div style="display: flex; gap: 10px;">
@@ -165,11 +151,23 @@
                     </div>
                     <input type="hidden" id="planStatusHidden" value="To Do">
                 </div>
-
                 <div style="display:flex; gap:10px; margin-top: 20px;">
                     <button type="button" id="btnDeletePlan" onclick="deletePlanFromForm()" style="display:none; flex:1; padding:15px; border-radius:12px; border:1px solid #ff4d4d; background:#fff5f5; color:#ff4d4d; font-weight:700; cursor:pointer;">Delete</button>
                     <button type="button" onclick="closeModal('modalPlan')" style="flex:1; padding:15px; border-radius:12px; border:1px solid #ddd; background:white; font-weight:700;">Cancel</button>
                     <button type="submit" class="btn-add" style="flex:1; justify-content:center;">Save Plan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalTodo" class="modal-overlay" style="display: none;">
+        <div class="modal-box" style="max-width: 450px;">
+            <h2>New Task</h2>
+            <form id="todoForm">
+                <div class="f-group"><label>Task Name</label><input type="text" id="todoTask" placeholder="Apa yang ingin dikerjakan?" required></div>
+                <div style="display:flex; gap:10px;">
+                    <button type="button" onclick="closeModal('modalTodo')" style="flex:1; padding:15px; border-radius:12px; border:1px solid #ddd; background:white; font-weight:700;">Cancel</button>
+                    <button type="submit" class="btn-add" style="flex:1; justify-content:center;">Add Task</button>
                 </div>
             </form>
         </div>
@@ -199,17 +197,7 @@
             const toolbar = [['bold', 'italic'], [{ 'list': 'ordered'}, { 'list': 'bullet' }]];
             quillLog = new Quill('#editorLog', { theme: 'snow', modules: { toolbar } });
             quillPlan = new Quill('#editorPlan', { theme: 'snow', modules: { toolbar } });
-            
             document.getElementById('password').addEventListener('keypress', e => { if(e.key === 'Enter') handleLogin(); });
-            
-            // Auto-hide Sidebar Logic
-            document.addEventListener('click', (e) => {
-                const sidebar = document.querySelector('.app-sidebar');
-                const menuBtn = document.getElementById('menuBtn');
-                if (!document.body.classList.contains('sidebar-hide') && sidebar && !sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
-                    document.body.classList.add('sidebar-hide');
-                }
-            });
         });
 
         function handleLogin() {
@@ -224,11 +212,15 @@
             currentTab = tab;
             document.getElementById('menuLog').classList.toggle('active', tab === 'log');
             document.getElementById('menuPlan').classList.toggle('active', tab === 'plan');
+            document.getElementById('menuTodo').classList.toggle('active', tab === 'todo');
             const tableHead = document.getElementById('tableHead');
             
             if(tab === 'plan') {
                 tableHead.innerHTML = `<tr><th>Topic</th><th>Keterangan</th><th>Action</th><th style="text-align:center">Status</th></tr>`;
                 loadPlanData();
+            } else if(tab === 'todo') {
+                tableHead.innerHTML = `<tr><th style="width:60px">Done</th><th>Task</th><th style="text-align:right">Action</th></tr>`;
+                loadTodoData();
             } else {
                 tableHead.innerHTML = `<tr><th>Date</th><th>Category</th><th>Key Learning</th><th>Action</th></tr>`;
                 loadLogData();
@@ -236,12 +228,9 @@
         }
 
         async function loadLogData() {
-            // Menambahkan urutan kedua berdasarkan created_at secara descending (terbaru)
-            const { data } = await _supabase
-                .from('logData')
-                .select('*')
+            const { data } = await _supabase.from('logData').select('*')
                 .order('logDate', { ascending: false })
-                .order('created_at', { ascending: false }); // <--- Tambahkan baris ini
+                .order('created_at', { ascending: false }); // Menampilkan yang terbaru jika tanggal sama
 
             document.getElementById('tableBody').innerHTML = (data || []).map(row => `
                 <tr>
@@ -264,51 +253,45 @@
             document.getElementById('tableBody').innerHTML = (data || []).map(row => {
                 let sClass = row.status === 'Completed' ? 'st-done' : row.status === 'In Progress' ? 'st-progress' : 'st-todo';
                 let sIcon = row.status === 'Completed' ? 'check-circle' : row.status === 'In Progress' ? 'loader' : 'circle';
-                
-                return `
-                <tr>
+                return `<tr>
                     <td data-label="Topic" style="font-weight:700">${row.topic}</td>
                     <td data-label="Keterangan"><button onclick='viewDetail("plan", ${JSON.stringify(row)})' style="border:1px solid #ddd; background:white; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:12px;">Lihat Materi</button></td>
-                    <td data-label="Action">
-                        <div style="display:flex; gap:12px;">
-                            <button onclick='editPlan(${JSON.stringify(row)})' style="border:none; background:none; color:#666; cursor:pointer;">
-                                <i data-lucide="edit-3" style="width:18px"></i>
-                            </button>
-                        </div>
-                    </td>
-                    <td data-label="Status" style="text-align:center">
-                        <button onclick='toggleStatus("${row.id}", "${row.status}")' class="status-toggle-btn ${sClass}">
-                            <i data-lucide="${sIcon}" style="width:14px"></i> ${row.status || 'To Do'}
-                        </button>
-                    </td>
+                    <td data-label="Action"><button onclick='editPlan(${JSON.stringify(row)})' style="border:none; background:none; color:#666; cursor:pointer;"><i data-lucide="edit-3" style="width:18px"></i></button></td>
+                    <td data-label="Status" style="text-align:center"><button onclick='toggleStatus("${row.id}", "${row.status}")' class="status-toggle-btn ${sClass}"><i data-lucide="${sIcon}" style="width:14px"></i> ${row.status || 'To Do'}</button></td>
                 </tr>`;
             }).join('');
             lucide.createIcons();
-}
+        }
 
-        async function toggleStatus(id, currentStatus) {
-            let nextStatus = "To Do";
-            if(currentStatus === "To Do") nextStatus = "In Progress";
-            else if(currentStatus === "In Progress") nextStatus = "Completed";
-            
-            const { error } = await _supabase.from('learningPlan').update({ status: nextStatus }).eq('id', id);
-            if(!error) { showToast(`Status: ${nextStatus}`); loadPlanData(); }
+        async function loadTodoData() {
+            const { data } = await _supabase.from('dailyTodo').select('*').order('created_at', { ascending: false });
+            document.getElementById('tableBody').innerHTML = (data || []).map(row => `
+                <tr style="${row.is_done ? 'opacity:0.5' : ''}">
+                    <td data-label="Status"><input type="checkbox" ${row.is_done ? 'checked' : ''} onchange="toggleTodoStatus('${row.id}', ${row.is_done})" style="width:20px; height:20px; accent-color:var(--accent); cursor:pointer;"></td>
+                    <td data-label="Task" style="${row.is_done ? 'text-decoration:line-through' : 'font-weight:600'}">${row.task}</td>
+                    <td data-label="Action" style="text-align:right"><button onclick="deleteTodo('${row.id}')" style="border:none; background:none; color:#ff4d4d; cursor:pointer;"><i data-lucide="trash-2" style="width:18px"></i></button></td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
         }
 
         function handleNewEntry() {
-                if(currentTab === 'log') {
-                    document.getElementById('modalLog').style.display = 'flex';
-                    document.getElementById('btnDeleteLog').style.display = 'none'; // Sembunyikan
-                    document.getElementById('logForm').reset(); quillLog.setContents([]);
-                    document.getElementById('editId').value = "";
-                    document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
-                } else {
-                    document.getElementById('modalPlan').style.display = 'flex';
-                    document.getElementById('btnDeletePlan').style.display = 'none'; // Sembunyikan
-                    document.getElementById('planForm').reset(); quillPlan.setContents([]);
-                    document.getElementById('planEditId').value = "";
-                }
+            if(currentTab === 'todo') {
+                document.getElementById('modalTodo').style.display = 'flex';
+                document.getElementById('todoForm').reset();
+            } else if(currentTab === 'log') {
+                document.getElementById('modalLog').style.display = 'flex';
+                document.getElementById('btnDeleteLog').style.display = 'none';
+                document.getElementById('logForm').reset(); quillLog.setContents([]);
+                document.getElementById('editId').value = "";
+                document.getElementById('logDate').value = new Date().toISOString().split('T')[0];
+            } else {
+                document.getElementById('modalPlan').style.display = 'flex';
+                document.getElementById('btnDeletePlan').style.display = 'none';
+                document.getElementById('planForm').reset(); quillPlan.setContents([]);
+                document.getElementById('planEditId').value = "";
             }
+        }
 
         document.getElementById('logForm').onsubmit = async (e) => {
             e.preventDefault();
@@ -335,25 +318,45 @@
             if(!res.error) { closeModal('modalPlan'); loadPlanData(); showToast("Plan Tersimpan!"); }
         };
 
-       // Update fungsi editLog
-            function editLog(row) {
-                handleNewEntry();
-                document.getElementById('btnDeleteLog').style.display = 'block'; // Tampilkan saat edit
-                document.getElementById('editId').value = row.id;
-                document.getElementById('logDate').value = row.logDate;
-                document.getElementById('categoryLog').value = row.categoryLog;
-                document.getElementById('keyLearning').value = row.keyLearning;
-                quillLog.root.innerHTML = row.notesLog || "";
-            }
+        document.getElementById('todoForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const task = document.getElementById('todoTask').value;
+            const { error } = await _supabase.from('dailyTodo').insert([{ task, is_done: false }]);
+            if(!error) { closeModal('modalTodo'); loadTodoData(); showToast("Task ditambahkan!"); }
+        };
 
-        // Update fungsi editPlan
-            function editPlan(row) {
-                document.getElementById('modalPlan').style.display = 'flex';
-                document.getElementById('btnDeletePlan').style.display = 'block'; // Tampilkan saat edit
-                document.getElementById('planEditId').value = row.id;
-                document.getElementById('planTopic').value = row.topic;
-                quillPlan.root.innerHTML = row.description || "";
-            }
+        async function toggleTodoStatus(id, current) {
+            await _supabase.from('dailyTodo').update({ is_done: !current }).eq('id', id);
+            loadTodoData();
+        }
+
+        async function deleteTodo(id) {
+            if(confirm("Hapus task ini?")) { await _supabase.from('dailyTodo').delete().eq('id', id); loadTodoData(); }
+        }
+
+        function editLog(row) {
+            handleNewEntry();
+            document.getElementById('btnDeleteLog').style.display = 'block';
+            document.getElementById('editId').value = row.id;
+            document.getElementById('logDate').value = row.logDate;
+            document.getElementById('categoryLog').value = row.categoryLog;
+            document.getElementById('keyLearning').value = row.keyLearning;
+            quillLog.root.innerHTML = row.notesLog || "";
+        }
+
+        function editPlan(row) {
+            document.getElementById('modalPlan').style.display = 'flex';
+            document.getElementById('btnDeletePlan').style.display = 'block';
+            document.getElementById('planEditId').value = row.id;
+            document.getElementById('planTopic').value = row.topic;
+            quillPlan.root.innerHTML = row.description || "";
+        }
+
+        async function toggleStatus(id, currentStatus) {
+            let nextStatus = currentStatus === "To Do" ? "In Progress" : currentStatus === "In Progress" ? "Completed" : "To Do";
+            await _supabase.from('learningPlan').update({ status: nextStatus }).eq('id', id);
+            loadPlanData();
+        }
 
         function viewDetail(type, row) {
             document.getElementById('detailOverlay').style.display = 'flex';
@@ -361,7 +364,6 @@
             document.getElementById('detContent').innerHTML = (type === 'log') ? (row.notesLog || "No notes") : (row.description || "No description");
         }
 
-        async function deletePlan(id) { if(confirm("Hapus data ini?")) { await _supabase.from('learningPlan').delete().eq('id', id); loadPlanData(); } }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function showToast(msg) {
             const t = document.getElementById('toast');
@@ -373,59 +375,29 @@
             document.getElementById('digitalClock').innerText = now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
             document.getElementById('currentDate').innerText = now.toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'});
         }
-
-        // Fungsi untuk memilih status di dalam Form
         function setStatusValue(status) {
             document.getElementById('planStatusHidden').value = status;
-            
-            // Reset style semua tombol pilihan
-            const btns = {
-                'To Do': document.getElementById('btnOptTodo'),
-                'In Progress': document.getElementById('btnOptProgress'),
-                'Completed': document.getElementById('btnOptDone')
-            };
-
-            Object.values(btns).forEach(b => {
-                b.className = 'status-toggle-btn';
-                b.style.border = '1px solid #ddd';
-                b.style.background = 'white';
-                b.style.color = '#666';
+            ['btnOptTodo', 'btnOptProgress', 'btnOptDone'].forEach(id => {
+                const b = document.getElementById(id);
+                b.style.background = 'white'; b.style.color = '#666'; b.style.border = '1px solid #ddd';
             });
-
-            // Beri gaya aktif pada tombol yang dipilih
-            if(status === 'To Do') {
-                btns[status].classList.add('st-todo');
-                btns[status].style.border = '1.5px solid #d1d5db';
-            } else if(status === 'In Progress') {
-                btns[status].classList.add('st-progress');
-                btns[status].style.border = '1.5px solid #bfdbfe';
-            } else {
-                btns[status].classList.add('st-done');
-                btns[status].style.border = '1.5px solid #333';
-            }
+            const active = status === 'To Do' ? 'btnOptTodo' : status === 'In Progress' ? 'btnOptProgress' : 'btnOptDone';
+            document.getElementById(active).style.background = status === 'Completed' ? '#000' : '#eff6ff';
+            document.getElementById(active).style.color = status === 'Completed' ? 'var(--accent)' : '#1d4ed8';
         }
 
         async function deleteLogFromForm() {
             const id = document.getElementById('editId').value;
-            if(id && confirm("Hapus log belajar ini secara permanen?")) {
-                const { error } = await _supabase.from('logData').delete().eq('id', id);
-                if(!error) {
-                    closeModal('modalLog');
-                    loadLogData();
-                    showToast("Data Log Berhasil Dihapus");
-                }
+            if(id && confirm("Hapus log?")) {
+                await _supabase.from('logData').delete().eq('id', id);
+                closeModal('modalLog'); loadLogData();
             }
         }
-
         async function deletePlanFromForm() {
             const id = document.getElementById('planEditId').value;
-            if(id && confirm("Hapus rencana belajar ini secara permanen?")) {
-                const { error } = await _supabase.from('learningPlan').delete().eq('id', id);
-                if(!error) {
-                    closeModal('modalPlan');
-                    loadPlanData();
-                    showToast("Data Plan Berhasil Dihapus");
-                }
+            if(id && confirm("Hapus plan?")) {
+                await _supabase.from('learningPlan').delete().eq('id', id);
+                closeModal('modalPlan'); loadPlanData();
             }
         }
     </script>
