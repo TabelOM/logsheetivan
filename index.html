@@ -236,7 +236,13 @@
         }
 
         async function loadLogData() {
-            const { data } = await _supabase.from('logData').select('*').order('logDate', { ascending: false });
+            // Menambahkan urutan kedua berdasarkan created_at secara descending (terbaru)
+            const { data } = await _supabase
+                .from('logData')
+                .select('*')
+                .order('logDate', { ascending: false })
+                .order('created_at', { ascending: false }); // <--- Tambahkan baris ini
+
             document.getElementById('tableBody').innerHTML = (data || []).map(row => `
                 <tr>
                     <td data-label="Date">${row.logDate}</td>
@@ -425,4 +431,3 @@
     </script>
 </body>
 </html>
-
