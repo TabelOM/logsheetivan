@@ -202,6 +202,27 @@
             quillPlan = new Quill('#editorPlan', { theme: 'snow', modules: { toolbar: tb } });
         });
 
+        // Menutup elemen jika klik di luar area
+        window.addEventListener('click', (e) => {
+            // 1. Otomatis sembunyikan Sidebar jika klik di luar area sidebar 
+            // (Hanya berlaku jika sidebar sedang terbuka/muncul)
+            const sidebar = document.querySelector('.app-sidebar');
+            const menuBtn = document.querySelector('.btn-round'); // Tombol toggle menu
+            
+            if (!document.body.classList.contains('sidebar-hide')) {
+                // Jika klik bukan di dalam sidebar DAN bukan di tombol menu
+                if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                    document.body.classList.add('sidebar-hide');
+                }
+            }
+
+            // 2. Otomatis tutup Modal (Log, Plan, Todo, Detail) jika klik pada overlay hitam
+            // Kita cukup cek apakah yang diklik adalah class 'modal-overlay'
+            if (e.target.classList.contains('modal-overlay')) {
+                e.target.style.display = 'none';
+            }
+        });
+
         function handleLogin() {
             if(document.getElementById('password').value === '123') {
                 document.getElementById('loginPage').style.display = 'none';
