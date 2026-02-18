@@ -200,6 +200,11 @@
             const tb = [['bold', 'italic'], [{list:'ordered'}, {list:'bullet'}]];
             quillLog = new Quill('#editorLog', { theme: 'snow', modules: { toolbar: tb } });
             quillPlan = new Quill('#editorPlan', { theme: 'snow', modules: { toolbar: tb } });
+
+            // Fitur Enter untuk Login
+            document.getElementById('password').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleLogin();
+            });
         });
 
         // Menutup elemen jika klik di luar area
