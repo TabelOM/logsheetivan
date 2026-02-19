@@ -56,11 +56,14 @@
 
         /* MODALS */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 1500; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .modal-box { background: white; width: 100%; max-width: 750px; max-height: 90vh; overflow-y: auto; border-radius: 24px; padding: 30px; }
+        .modal-box { background: white; width: 95%; max-width: 900px; max-height: 95vh; overflow-y: auto; border-radius: 24px; padding: 30px; }
         .f-group { margin-bottom: 15px; }
         .f-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
         .f-group input { width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 12px; outline: none; }
-        .rich-editor { height: 200px; border-radius: 0 0 12px 12px; }
+        
+        /* RICH EDITOR HEIGHT IMPROVEMENT */
+        .rich-editor { height: 450px; border-radius: 0 0 12px 12px; font-size: 15px; }
+        .ql-toolbar.ql-snow { border-top-left-radius: 12px; border-top-right-radius: 12px; background: #f9fafb; }
 
         .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #333; color: white; padding: 12px 24px; border-radius: 12px; transition: 0.3s; z-index: 3000; }
         .toast.show { transform: translateX(-50%) translateY(0); }
@@ -126,7 +129,7 @@
                     <div class="f-group"><label>Category</label><input type="text" id="categoryLog" required></div>
                 </div>
                 <div class="f-group"><label>Key Learning</label><input type="text" id="keyLearning" required></div>
-                <div class="f-group"><label>Notes</label><div id="editorLog" class="rich-editor"></div></div>
+                <div class="f-group"><label>Notes (Use Tab for sub-numbering)</label><div id="editorLog" class="rich-editor"></div></div>
                 <div style="display:flex; gap:10px;">
                     <button type="button" id="btnDeleteLog" onclick="deleteLogFromForm()" style="display:none; flex:1; padding:15px; border-radius:12px; border:1px solid #ff4d4d; color:#ff4d4d; background:none; font-weight:700;">Delete</button>
                     <button type="button" onclick="closeModal('modalLog')" style="flex:1; padding:15px; border-radius:12px; border:1px solid #ddd; background:white;">Cancel</button>
@@ -197,36 +200,41 @@
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             setInterval(startTime, 1000);
-            const tb = [['bold', 'italic'], [{list:'ordered'}, {list:'bullet'}]];
-            quillLog = new Quill('#editorLog', { theme: 'snow', modules: { toolbar: tb } });
-            quillPlan = new Quill('#editorPlan', { theme: 'snow', modules: { toolbar: tb } });
 
-            // 1. Fitur Enter untuk Login
+            // Perbaikan Toolbar: Menambah Indent agar Numbering bisa sub-list
+            const tb = [
+                ['bold', 'italic', 'underline'], 
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'indent': '-1'}, { 'indent': '+1' }], 
+                ['clean'] 
+            ];
+
+            quillLog = new Quill('#editorLog', { theme: 'snow', modules: { toolbar: tb }, placeholder: 'Tulis catatan detail...' });
+            quillPlan = new Quill('#editorPlan', { theme: 'snow', modules: { toolbar: tb }, placeholder: 'Tulis rencana belajar...' });
+
+            // Fitur Login ENTER & Auto-focus
             const passInput = document.getElementById('password');
+            passInput.focus();
             passInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') handleLogin();
             });
-
-            // 2. Auto-focus kursor ke password saat baru buka webs
-            passInput.focus();
         });
 
-        // Menutup elemen jika klik di luar area
+        // Click Outside Logic
+        // Perbaikan Logic Click Outside agar tidak memblokir tombol
         window.addEventListener('click', (e) => {
-            // 1. Otomatis sembunyikan Sidebar jika klik di luar area sidebar 
-            // (Hanya berlaku jika sidebar sedang terbuka/muncul)
             const sidebar = document.querySelector('.app-sidebar');
-            const menuBtn = document.querySelector('.btn-round'); // Tombol toggle menu
+            const menuBtn = document.querySelector('.btn-round'); // Tombol hamburger menu
             
+            // 1. Logic untuk Sidebar
             if (!document.body.classList.contains('sidebar-hide')) {
-                // Jika klik bukan di dalam sidebar DAN bukan di tombol menu
+                // Jika yang diklik BUKAN sidebar DAN BUKAN tombol menu, maka tutup sidebar
                 if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
                     document.body.classList.add('sidebar-hide');
                 }
             }
 
-            // 2. Otomatis tutup Modal (Log, Plan, Todo, Detail) jika klik pada overlay hitam
-            // Kita cukup cek apakah yang diklik adalah class 'modal-overlay'
+            // 2. Logic untuk Modal Overlay (hanya tutup jika yang diklik benar-benar area hitamnya)
             if (e.target.classList.contains('modal-overlay')) {
                 e.target.style.display = 'none';
             }
@@ -287,7 +295,6 @@
             lucide.createIcons();
         }
 
-        // --- TODO POPUP LOGIC ---
         function openTodoManager() {
             document.getElementById('modalTodoManager').style.display = 'flex';
             loadTodoListOnly();
@@ -302,7 +309,7 @@
                     <span style="flex:1; font-size:14px; ${row.is_done ? 'text-decoration:line-through' : 'font-weight:500'}">${row.task}</span>
                     <button onclick="deleteTodo('${row.id}')" style="border:none; background:none; color:#ff4d4d; cursor:pointer;"><i data-lucide="trash-2" style="width:16px"></i></button>
                 </div>
-            `).join('') || '<p style="text-align:center; color:gray; margin-top:20px;">No tasks for today.</p>';
+            `).join('') || '<p style="text-align:center; color:gray; margin-top:20px;">No tasks today.</p>';
             lucide.createIcons();
         }
 
@@ -316,7 +323,6 @@
         async function toggleTodo(id, cur) { await _supabase.from('dailyTodo').update({is_done: !cur}).eq('id', id); loadTodoListOnly(); }
         async function deleteTodo(id) { if(confirm("Hapus task?")) { await _supabase.from('dailyTodo').delete().eq('id', id); loadTodoListOnly(); } }
 
-        // --- CRUD HELPERS ---
         function handleNewEntry() {
             if(currentTab === 'log') {
                 document.getElementById('modalLog').style.display = 'flex';
