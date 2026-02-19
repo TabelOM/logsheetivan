@@ -201,10 +201,14 @@
             quillLog = new Quill('#editorLog', { theme: 'snow', modules: { toolbar: tb } });
             quillPlan = new Quill('#editorPlan', { theme: 'snow', modules: { toolbar: tb } });
 
-            // Fitur Enter untuk Login
-            document.getElementById('password').addEventListener('keypress', (e) => {
+            // 1. Fitur Enter untuk Login
+            const passInput = document.getElementById('password');
+            passInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') handleLogin();
             });
+
+            // 2. Auto-focus kursor ke password saat baru buka webs
+            passInput.focus();
         });
 
         // Menutup elemen jika klik di luar area
