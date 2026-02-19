@@ -76,6 +76,35 @@
             td { display: block; padding: 5px 0; border: none; }
             td:before { content: attr(data-label); font-weight: 700; font-size: 10px; color: #999; display: block; }
         }
+
+        /* Perbaikan Reset Numbering untuk Sub-List */
+.ql-editor ol {
+    counter-reset: list-0;
+}
+.ql-editor ol li {
+    counter-increment: list-0;
+    counter-reset: list-1; /* Reset sub-list level 1 setiap ada li baru */
+}
+.ql-editor ol li[data-list="ordered"] {
+    counter-increment: list-0;
+}
+
+/* Level 1 (a, b, c) */
+.ql-editor ol li.ql-indent-1 {
+    counter-increment: list-1;
+    counter-reset: list-2; /* Reset level 2 */
+}
+.ql-editor ol li.ql-indent-1:before {
+    content: counter(list-1, lower-alpha) ". "; /* Menggunakan huruf a, b, c */
+}
+
+/* Level 2 (i, ii, iii) */
+.ql-editor ol li.ql-indent-2 {
+    counter-increment: list-2;
+}
+.ql-editor ol li.ql-indent-2:before {
+    content: counter(list-2, lower-roman) ". "; /* Menggunakan angka romawi */
+}
     </style>
 </head>
 <body class="sidebar-hide">
@@ -202,10 +231,11 @@
             setInterval(startTime, 1000);
 
             // Perbaikan Toolbar: Menambah Indent agar Numbering bisa sub-list
+            // Pastikan bagian ini ada di dalam DOMContentLoaded
             const tb = [
                 ['bold', 'italic', 'underline'], 
                 [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'indent': '-1'}, { 'indent': '+1' }], 
+                [{ 'indent': '-1'}, { 'indent': '+1' }], // WAJIB ADA UNTUK RESET NUMBERINGW
                 ['clean'] 
             ];
 
